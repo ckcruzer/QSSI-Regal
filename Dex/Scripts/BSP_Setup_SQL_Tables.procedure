@@ -1,0 +1,49 @@
+Procedure	"BSP_Setup_SQL_Tables"
+{
+	Core	"System"
+	Documentation	""
+	Script	"{------------------------------------------------------------------------
+DESCRIPTION:
+This procedure will create the tables for the application, if the SQL
+database manager is being used.
+-------------------------------------------------------------------------
+(c) 2001 Microsoft Great Plains Business Solutions. All rights reserved.
+
+This script may be freely copied, altered, and used in any Dexterity
+applications. Great Plains Software makes no warranties regarding 
+this script, including any warranties of merchantability or fitness 
+for a particular purpose.
+-------------------------------------------------------------------------}
+if 'SQL Server' of globals > 0 then
+	{Is the system administrator loggin in?}
+	if lower('User ID' of globals) = \"sa\" then
+		call BSP_Write_SQL_AutoGrant, \"DYNAMICS\";
+		call BSP_Write_SQL_AutoGrant, 'Intercompany ID' of globals;
+		call BSP_Create_Table, \"BSP_Integration_SETP\";
+		call BSP_Create_Table, \"BSP_Powerhouse_SO_LNE_Transfer\";
+		call BSP_Create_Table, \"BSP_Powerhouse_SO_Log\";
+		call BSP_Create_Table, \"BSP_Powerhouse_Item_Transfer\";
+		call BSP_Create_Table, \"BSP_Powerhouse_Location_Mapping\";
+		call BSP_Create_Table, \"BSP_Powerhouse_Receiving_HDR\";
+		call BSP_Create_Table, \"BSP_Powerhouse_Receiving_LINE\";
+		call BSP_Create_Table, \"BSP_Powerhouse_Receiving_Transfer\";
+		call BSP_Create_Table, \"BSP_Powerhouse_PO_Transfer\";
+		
+		
+		{Send warning to user that tables and granting permissions are finished}
+		warning \"Tables have been created successfully.\";
+	else
+		warning \"You must be logged in as System Admin (sa) to create tables.\";
+	end if;
+end if;
+
+
+
+"
+	ServiceAction	""
+	ServiceCustomAciton	""
+	ServiceEnabled	"FALSE"
+	ServiceRawRequest	"FALSE"
+	ServiceUriTemplate	""
+	UserProperties	""
+}

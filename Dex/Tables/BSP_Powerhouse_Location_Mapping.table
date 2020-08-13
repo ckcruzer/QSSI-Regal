@@ -1,0 +1,70 @@
+Table	"BSP_Powerhouse_Location_Mapping"
+{
+	AllowActiveLocking	"false"
+	DatabaseType	"SQL"
+	DexRowTimestamp	"false"
+	DisplayName	"BSP Powerhouse Location Mapping"
+	FourByteHeader	"true"
+	PhysicalName	"BSP_Powerhouse_Loc_Map"
+	Restriction	""
+	Series	"Inventory"
+	TableType	"Standard"
+	~Fields
+	{
+		TableField	"BSP_PHWarehouseID"		
+		{
+			Encrypt	"false"
+			Field	"BSP_PHWarehouseID"
+			Position	"0"
+		}
+		TableField	"Location Code"		
+		{
+			Encrypt	"false"
+			Field	"Location Code"
+			Position	"1"
+		}
+	}
+	~Keys
+	{
+		Key	"BSP_Powerhouse_Location_Mapping_Key1"		
+		{
+			Clustered	"false"
+			Compress	"false"
+			CreateIndex	"true"
+			DisableDeletes	"false"
+			DisableFirsts	"false"
+			DisableGets	"false"
+			DisableInserts	"false"
+			DisableLasts	"false"
+			DisableNexts	"false"
+			Duplicates	"false"
+			Modifiable	"true"
+			Position	"0"
+			Primary	"true"
+			Segments
+			{
+				KeySegment	"BSP_PHWarehouseID"				
+				{
+					Component	""
+					Descending	"false"
+					IgnoreCase	"true"
+					NoCombining	"false"
+					NoLengthByte	"false"
+					Position	"0"
+				}
+				KeySegment	"Location Code"				
+				{
+					Component	""
+					Descending	"false"
+					IgnoreCase	"true"
+					NoCombining	"false"
+					NoLengthByte	"false"
+					Position	"1"
+				}
+			}
+		}
+	}
+	~Relationships
+	{
+	}
+}

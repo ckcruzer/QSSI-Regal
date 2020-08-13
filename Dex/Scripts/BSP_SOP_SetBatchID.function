@@ -1,0 +1,93 @@
+Function	"BSP_SOP_SetBatchID"
+{
+	Core	"Sales"
+	Documentation	""
+	Script	"function	returns integer		SetBatchID;
+
+
+in		'SOP Number'		sSOPNumber;
+in		integer				nSOPType;
+in		'Batch Number'		sNewBatchNumber;			{ Batch the transactions are to be moved to }
+in		'Batch Number'		sExistingBatchNumber;		{ Batch the transactiosn are currently in }
+optional in 'Batch Number'		sDestinationBatchNumber1;
+optional in 'Batch Number'		sDestinationBatchNumber2;		
+
+local   SOP_SOState			SOState;
+local	currency		cyBatchTotal = 0;
+local	integer			nStatus;
+local	long			nRecordsInBatch = 0;
+local	SOP_SOIdxID		SOIdxID;	
+
+
+{ Initialize }
+SetBatchID = OKAY;
+SOIdxID:'SOP Type' = nSOPType;
+SOIdxID:'SOP Number' = sSOPNumber;
+
+nStatus = Create(SOState, table SOP_HDR_WORK, 0, \"\",true) of form SOP_SO;		
+{ Check for the documents in the list }
+call SetIndexID of form SOP_SO,
+		SOState,
+		table(SOState:'Table Reference'),
+		SOIdxID;
+nStatus = Get(SOState, table(SOState:'Table Reference'), CHG + EQUAL) of form SOP_SO;
+if nStatus = OKAY then
+	{ Check to see that another user doesn't already have this batch marked to process or
+		the the document isn't a real time posted or voided document }
+	if ( sExistingBatchNumber = GetBatchNumber(SOState) of form SOP_SO ) and
+		 ( BATCH_SOURCE_SOP_ENTRY = GetBatchSource(SOState) of form SOP_SO ) then
+		{Track the Count and Total for the documents that are being switched in the batch}
+		increment cyBatchTotal by GetDocumentAmount(SOState, CURRENCYVIEW_FUNCTIONAL ) of form SOP_SO;
+		increment nRecordsInBatch;
+		{ Update the new batch on the sales document}
+		call SetBatchNumber of form SOP_SO, SOState, sNewBatchNumber;
+		{update destination batch if succesful}
+		if empty('Dest Batch 1' of table(SOState:'Table Reference')) and not empty(sDestinationBatchNumber1) then
+		 	'Dest Batch 1' of table(SOState:'Table Reference') = sDestinationBatchNumber1;
+		end if;
+		if empty('Dest Batch 2' of table(SOState:'Table Reference')) and not empty(sDestinationBatchNumber2) then
+		 	'Dest Batch 2' of table(SOState:'Table Reference') = sDestinationBatchNumber2;
+		end if;
+		
+		nStatus = Commit(SOState, table(SOState:'Table Reference')) of form SOP_SO;
+		assert (nStatus = OKAY);
+		
+	elseif ( sNewBatchNumber = GetBatchNumber(SOState) of form SOP_SO ) and
+		 ( BATCH_SOURCE_SOP_ENTRY = GetBatchSource(SOState) of form SOP_SO ) then
+		 { Document has already been added to this batch }
+		 call Release of form SOP_SO,
+				SOState, table(SOState:'Table Reference');
+		abort script;
+		
+	else
+		{ Document is marked by another user because it is in another batch }
+		SetBatchID = IN_USE;
+		call Release of form SOP_SO,
+				SOState, table(SOState:'Table Reference');
+		abort script;
+		
+	end if;
+		
+else
+	SetBatchID = IN_USE;
+	abort script;
+	
+end if;
+
+if nRecordsInBatch > 0 then
+	{ Adjust the existing Batch and new Batch for the transactions removed }
+	call AdjustCountAndTotal of form Batch, 
+			BATCH_SOURCE_SOP_ENTRY, 
+			sExistingBatchNumber, 
+			(-nRecordsInBatch),
+			(-cyBatchTotal);
+			
+	call AdjustCountAndTotal of form Batch, 
+			BATCH_SOURCE_SOP_ENTRY, 
+			sNewBatchNumber, 
+			nRecordsInBatch,
+			cyBatchTotal;
+			
+end if;"
+	UserProperties	""
+}

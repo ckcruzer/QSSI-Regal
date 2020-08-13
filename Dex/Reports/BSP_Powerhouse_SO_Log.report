@@ -1,0 +1,271 @@
+Report	"BSP_Powerhouse_SO_Log"
+{
+	CalculatedFields
+	{
+	}
+	DisplayName	""
+	FirstPageHeader	"true"
+	Key	"1"
+	LastPageFooter	"true"
+	LeftMargin	"0"
+	MainTable	"BSP_Powerhouse_SO_Transfer_Error_TMP"
+	MaxRecords	"0"
+	MultiLoginReport	"false"
+	Orientation	"PrinterSetting"
+	ReportTables
+	{
+		ReportTable	"00000"		
+		{
+			LinkedTo	""
+			Table	"BSP_Powerhouse_SO_Transfer_Error_TMP"
+		}
+	}
+	Restrictions
+	{
+	}
+	Sections
+	{
+		ReportBody	"Body"		
+		{
+			Dividers
+			{
+			}
+			Fields
+			{
+				ReportControl	"43"				
+				{
+					Alignment	"left"
+					BackColor	"White"
+					DisplayOptions	"Visible"
+					DisplayType	"Data"
+					Field	"'BSP_Powerhouse_SO_Transfer_Error_TMP'.'VersionNumber'"
+					Font	"Times New Roman"
+					FontBold	"false"
+					FontColor	"Black"
+					FontItalic	"false"
+					FontSize	"10"
+					FontUnderline	"false"
+					Format	""
+					FormatField	""
+					Pattern	"(none)"
+					PatternColor	"White"
+					PositionLeft	"0"
+					PositionTop	"60"
+					ReadingOrder	"LeftToRight"
+					SizeHeight	"12"
+					SizeWidth	"63"
+					ZOrder	"10"
+				}
+				ReportControl	"44"				
+				{
+					Alignment	"left"
+					BackColor	"White"
+					DisplayOptions	"Visible"
+					DisplayType	"Data"
+					Field	"'BSP_Powerhouse_SO_Transfer_Error_TMP'.'Error Message Text'"
+					Font	"Times New Roman"
+					FontBold	"false"
+					FontColor	"Black"
+					FontItalic	"false"
+					FontSize	"10"
+					FontUnderline	"false"
+					Format	""
+					FormatField	""
+					Pattern	"(none)"
+					PatternColor	"White"
+					PositionLeft	"63"
+					PositionTop	"60"
+					ReadingOrder	"LeftToRight"
+					SizeHeight	"12"
+					SizeWidth	"504"
+					ZOrder	"11"
+				}
+			}
+			PositionBottom	"71"
+			SectionType	"Body"
+			SuppressWhenFieldIsEmpty	""
+		}
+		AdditionalReportFooter	"Footer-SOP Number"		
+		{
+			BreakField	"'BSP_Powerhouse_SO_Transfer_Error_TMP'.'SOP Number'"
+			Fields
+			{
+			}
+			NoBreakAtRecordCount	"false"
+			PageBreak	"false"
+			PositionBottom	"83"
+			RecordsPerBody	"0"
+			ResetReport	"false"
+			SectionType	"AdditionalFooter"
+			SuppressLastRecord	"false"
+			SuppressWhenFieldIsEmpty	""
+		}
+		AdditionalReportHeader	"Header-SOP Number"		
+		{
+			BreakField	"'BSP_Powerhouse_SO_Transfer_Error_TMP'.'SOP Number'"
+			Fields
+			{
+				ReportControl	"42"				
+				{
+					Alignment	"left"
+					BackColor	"White"
+					DisplayOptions	"Visible"
+					DisplayType	"Data"
+					Field	"'BSP_Powerhouse_SO_Transfer_Error_TMP'.'SOP Number'"
+					Font	"Times New Roman"
+					FontBold	"false"
+					FontColor	"Black"
+					FontItalic	"false"
+					FontSize	"10"
+					FontUnderline	"false"
+					Format	""
+					FormatField	""
+					Pattern	"(none)"
+					PatternColor	"White"
+					PositionLeft	"0"
+					PositionTop	"48"
+					ReadingOrder	"LeftToRight"
+					SizeHeight	"12"
+					SizeWidth	"91"
+					ZOrder	"9"
+				}
+			}
+			NoBreakAtRecordCount	"false"
+			PositionBottom	"59"
+			RecordsPerReportBody	"0"
+			SectionType	"AdditionalHeader"
+			SuppressWhenFieldIsEmpty	""
+		}
+		ReportSection	"ReportFooter"		
+		{
+			Fields
+			{
+				ReportLegend	"35"				
+				{
+					Alignment	"left"
+					BackColor	"White"
+					DisplayOptions	"Visible"
+					Font	"Times New Roman"
+					FontBold	"false"
+					FontColor	"Black"
+					FontItalic	"false"
+					FontSize	"10"
+					FontUnderline	"false"
+					Index	"1"
+					Pattern	"(none)"
+					PatternColor	"White"
+					PositionLeft	"0"
+					PositionTop	"84"
+					ReadingOrder	"LeftToRight"
+					SizeHeight	"12"
+					SizeWidth	"287"
+					ZOrder	"12"
+				}
+				ReportLegend	"36"				
+				{
+					Alignment	"left"
+					BackColor	"White"
+					DisplayOptions	"Visible"
+					Font	"Times New Roman"
+					FontBold	"false"
+					FontColor	"Black"
+					FontItalic	"false"
+					FontSize	"10"
+					FontUnderline	"false"
+					Index	"2"
+					Pattern	"(none)"
+					PatternColor	"White"
+					PositionLeft	"0"
+					PositionTop	"96"
+					ReadingOrder	"LeftToRight"
+					SizeHeight	"12"
+					SizeWidth	"287"
+					ZOrder	"13"
+				}
+			}
+			PositionBottom	"107"
+			SectionType	"ReportFooter"
+		}
+		ReportSection	"ReportHeader"		
+		{
+			Fields
+			{
+				ReportText	"37"				
+				{
+					Alignment	"center"
+					BackColor	"Transparent"
+					DisplayOptions	"Visible"
+					Font	"Times New Roman"
+					FontBold	"true"
+					FontColor	"Black"
+					FontItalic	"false"
+					FontSize	"12"
+					FontUnderline	"false"
+					Pattern	"(none)"
+					PatternColor	"White"
+					PositionLeft	"175"
+					PositionTop	"0"
+					ReadingOrder	"LeftToRight"
+					SizeHeight	"15"
+					SizeWidth	"217"
+					Text	"Powerhouse SO Integration Error  Log"
+					ZOrder	"7"
+				}
+				ReportText	"4"				
+				{
+					Alignment	"left"
+					BackColor	"Transparent"
+					DisplayOptions	"Visible"
+					Font	"Times New Roman"
+					FontBold	"false"
+					FontColor	"Black"
+					FontItalic	"false"
+					FontSize	"11"
+					FontUnderline	"false"
+					Pattern	"(none)"
+					PatternColor	"White"
+					PositionLeft	"0"
+					PositionTop	"36"
+					ReadingOrder	"LeftToRight"
+					SizeHeight	"12"
+					SizeWidth	"112"
+					Text	"Document Number"
+					ZOrder	"6"
+				}
+				ReportLine	"41"				
+				{
+					LineColor	"Black"
+					LineSize	"1"
+					PositionLeft	"1"
+					PositionTop	"36"
+					SizeHeight	"0"
+					SizeWidth	"587"
+					ZOrder	"8"
+				}
+			}
+			PositionBottom	"47"
+			SectionType	"ReportHeader"
+		}
+	}
+	Series	"3rdParty"
+	SixLinesPerInch	"false"
+	SkipBlankRecords	"false"
+	SortSegments
+	{
+		Sort	"0000"		
+		{
+			IgnoreCase	"false"
+			Segment	"'BSP_Powerhouse_SO_Transfer_Error_TMP'.'VersionNumber'"
+			SortOrder	"Ascending"
+		}
+		Sort	"0001"		
+		{
+			IgnoreCase	"false"
+			Segment	"'BSP_Powerhouse_SO_Transfer_Error_TMP'.'SOP Number'"
+			SortOrder	"Ascending"
+		}
+	}
+	SuppressCents	"false"
+	Type	"Graphic"
+	UseReportFooterForLastPageFooter	"false"
+}

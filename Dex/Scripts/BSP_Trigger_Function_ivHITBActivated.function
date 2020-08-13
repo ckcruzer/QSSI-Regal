@@ -1,0 +1,10 @@
+Function	"BSP_Trigger_Function_ivHITBActivated"
+{
+	Core	"Sales"
+	Documentation	""
+	Script	"{enable HITB}
+function returns boolean HITBActivated;
+
+HITBActivated = true;"
+	UserProperties	""
+}

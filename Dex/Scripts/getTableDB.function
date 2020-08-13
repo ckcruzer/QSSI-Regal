@@ -1,0 +1,20 @@
+Function	"getTableDB"
+{
+	Core	"System"
+	Documentation	""
+	Script	"function returns string DBname;
+
+in string tablename;
+in integer dict_id;
+
+local string path;
+local integer i;
+
+{this will return a path like TWO/dbo/ we just need the TWO}
+path = 	getLocation(tablename,'Company ID' of globals,dict_id) of form XTableInformation;
+i = pos(path,\"/\",1);
+DBname = substring(path,1,i-1);
+
+"
+	UserProperties	""
+}

@@ -1,0 +1,58 @@
+Procedure	"BSP_Nodus_sopTransfer"
+{
+	Core	"Sales"
+	Documentation	""
+	Script	"sproc 	returns long	SQLReturnStatus;
+in		'SOP Type'		SopType;
+in		'SOP Number'	SopNumber;
+in		'SOP Type'		NewSopType;
+in		'SOP Number'	NewSopNumber;
+out		long			SQLErrorState;
+
+local	long	l_ReturnCode, l_ErrorCode, TryCount;
+
+if Tools_GetTranLevel() <> 0  then
+	{We shouldn't catch an error here if we're within a database transaction.
+	The calling code will catch the error and handle it properly.}
+	call sproc \"BSP_Nodus_sopTransfer\",
+		l_ReturnCode,
+		SopType,
+		SopNumber,
+		NewSopType,
+		NewSopNumber,
+		l_ErrorCode;	
+
+else
+	try 
+		call sproc \"BSP_Nodus_sopTransfer\",
+			l_ReturnCode,
+			SopType,
+			SopNumber,
+			NewSopType,
+			NewSopNumber,
+			l_ErrorCode;
+		
+	catch [EXCEPTION_CLASS_DB_DEADLOCK]  
+	    if Deadlock_Processing(TryCount) then
+	  	    restart try;
+		else
+			exit try;
+		end if;
+		
+	else
+		warning Exception_Message();
+		exit try;
+	end try;
+
+end if;
+	
+SQLReturnStatus = l_ReturnCode;
+SQLErrorState = l_ErrorCode;
+"
+	ServiceAction	""
+	ServiceCustomAciton	""
+	ServiceEnabled	"FALSE"
+	ServiceRawRequest	"FALSE"
+	ServiceUriTemplate	""
+	UserProperties	""
+}

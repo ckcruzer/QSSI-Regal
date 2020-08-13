@@ -1,0 +1,57 @@
+Function	"BSP_Trigger_Function_Delete_SOP_Entry"
+{
+	Core	"Sales"
+	Documentation	""
+	Script	"function	returns	integer	Delete;
+
+in			integer						nCallerID;
+inout		SOP_SOState					SOState;
+inout		SOP_SOLineState				SOP_SOLineState;
+inout		sopExtPricingPromoWork		sopExtPricingPromoWork;
+in			'SOP Number'				sSOPNumber;
+in			'SOP Type'					nSOPType;
+in			boolean						fChanged;
+in			'Batch Number'				sBatchNumber;
+in			'Times Printed'				nTimesPrinted;
+in			'Deposit Received'			cyDepositReceived;
+in			'SOP Status'				nSOPStatus;
+in			'Item Number'				sItemNumber;
+in			boolean						fDidPreLineRun;
+in			boolean						fLineSaved;
+in			'Line Item Sequence'		nLineItemSequence;
+in			'QTY Allocated'				cyQTYAllocated;
+in			'QTY In Base U Of M'		cyQTYInBaseUofM;
+in			'QTY To Back Order'			cyQTYToBackOrder;
+in			'Location Code'				sLocationCode;
+inout		'SOP Type'					nTempType;
+inout		table						SOP_ID_SETP;
+inout		table 						SOP_LINE_WORK;
+inout		table 						SOP_HDR_HIST;
+inout		table 						SOP_Report_TEMP;
+inout		table 						SOP_Document_SETP;
+inout		table 						SOP_SETP;
+
+
+local 	integer 		l_error, nStatus;
+local	string			sMsg;
+local	SOP_SOIdxID		SOPSOIdxID;
+local	boolean			l_CardSuccess;
+
+local 'Error Message Text' l_ErrorMessage;
+
+if not isopen(form SOP_Entry) then
+	abort script;
+end if;
+
+nStatus = Delete;
+if nStatus = SOP_RESTART_FORM_NO_ABORT then
+	call BSP_Trigger_Function_Delete_SOP_Entry_Proc, nSOPType, sSOPNumber, nStatus, l_ErrorMessage;
+	if nStatus = OKAY then
+		warning \"Record has been successfully sent to Powerhouse.\";
+	elseif nStatus = 1 then
+		warning \"There was an error processing your request. \" + l_ErrorMessage;
+		abort script;
+	end if;
+end if;"
+	UserProperties	""
+}

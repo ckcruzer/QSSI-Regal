@@ -1,0 +1,225 @@
+Procedure	"convert_tables"
+{
+	Core	"System"
+	Documentation	""
+	Script	"in string table_name;
+in integer dict_id;
+
+
+local long GPS_error_number, SQL_error_number,SQL_connection,returnval;
+local string SQL_error_string, ODBC_error_string;
+local boolean result;
+local integer i,x,item_number,item_data;
+
+local text sqltext;
+local long status;
+local string l_file;
+local string inDB;
+local string sColumnName,default_name;
+local integer iColumnType;
+
+local anonymous table mytable;
+
+{clear our control lists}
+clear gpOldFieldList of window BSP_INST_UTIL of form BSP_INST_UTIL,
+	gpNewFieldList of window BSP_INST_UTIL of form BSP_INST_UTIL,
+	gpCommonField of window BSP_INST_UTIL of form BSP_INST_UTIL;
+result = Table_SetDeleteOptions(true);
+result = Table_SetCreateMode(true);
+
+
+
+{open the table so we can get the name}
+open table mytable with name table_name;
+close table mytable;
+inDB=getTableDB(table_name,dict_id);
+l_file = physicalname(table mytable);
+
+try
+
+{Connect to the SQL data source.}
+status = SQL_Connect(SQL_connection);
+if status = 0 then
+	sqltext = \"drop table tempdb..conversion_file\";
+	status = SQL_Execute(SQL_connection, sqltext);	
+
+	if status <> 0 and status <> 3701 {table cannot be found}then
+		throw  22000;
+	end if;
+	
+	{move existing data}	
+	sqltext = \"SELECT \" + inDB + \"..\" + l_file + \".* \" +
+				\"INTO tempdb..conversion_file \" +
+				\"FROM \" + inDB + \"..\" + l_file;
+	
+	status = SQL_Execute(SQL_connection, sqltext);
+	if status <> 0 then
+		throw  22000;
+	end if;
+	sqltext = \"use \" + 'Intercompany ID' of globals;
+	status = SQL_Execute(SQL_connection, sqltext);	
+	sqltext = \"select name,xtype from syscolumns where id = (select id from sysobjects where name = '\" + l_file +\"') order by colid\";
+	status = SQL_Execute(SQL_connection, sqltext);
+	if status <> 0 then
+		throw  22000;
+	end if;
+	if status = 0 then
+		status = SQL_FetchNext(SQL_connection);
+		while status <> 31 do
+			{return our dataset - put column name and the field type in item data}
+			status = SQL_GetData(SQL_connection, 1, sColumnName);
+			status = SQL_GetData(SQL_connection, 2, iColumnType);
+			if sColumnName <> \"DEX_ROW_ID\" then
+				add item sColumnName, iColumnType to gpOldFieldList of window BSP_INST_UTIL of form BSP_INST_UTIL;
+			end if;
+			status = SQL_FetchNext(SQL_connection);			
+		end while;
+	end if;	
+
+	{remove old table as data is now safely copied, we opened it earlier}
+	open table mytable with name table_name,exclusive;
+	delete table mytable;
+
+	status = SQL_Terminate(SQL_connection);	
+	status = SQL_Connect(SQL_connection);
+
+	
+		
+	{open it again with deleted/new/modified columns}
+	open table mytable with name table_name;
+
+	{and get the new table structure}
+	sqltext = \"use \" + 'Intercompany ID' of globals;
+	status = SQL_Execute(SQL_connection, sqltext);	
+	sqltext = \"select name,xtype from syscolumns where id = (select id from sysobjects where name = '\" + l_file +\"') order by colid\";
+	status = SQL_Execute(SQL_connection, sqltext);
+	if status <> 0 then
+		throw  22000;
+	end if;
+	if status = 0 then
+		status = SQL_FetchNext(SQL_connection);
+		while status <> 31 do
+			{return our dataset - put column name and the field type in item data}
+			status = SQL_GetData(SQL_connection, 1, sColumnName);
+			status = SQL_GetData(SQL_connection, 2, iColumnType);
+			if sColumnName <> \"DEX_ROW_ID\" then
+				add item sColumnName, iColumnType to gpNewFieldList of window BSP_INST_UTIL of form BSP_INST_UTIL;
+			end if;
+			status = SQL_FetchNext(SQL_connection);			
+		end while;
+	end if;		
+	
+	{ok, now we have old and new definitions}
+	x = countitems(gpOldFieldList of window BSP_INST_UTIL of form BSP_INST_UTIL);
+	for i= 1 to x do
+		item_number= finditem(gpNewFieldList of window BSP_INST_UTIL of form BSP_INST_UTIL,
+							itemname(gpOldFieldList of window BSP_INST_UTIL of form BSP_INST_UTIL,i));
+		{if we find the field, then the field hasn't changed going from version to version,
+		copy it and the itemdata to the new table definition}
+		if item_number > 0 then
+			item_data = itemdata(gpOldFieldList of window BSP_INST_UTIL of form BSP_INST_UTIL,i);
+			add item itemname(gpOldFieldList of window BSP_INST_UTIL of form BSP_INST_UTIL,i),
+				 item_data to gpCommonField of window BSP_INST_UTIL of form BSP_INST_UTIL;
+			{remove the common field from the new field list}
+			delete item item_number from gpNewFieldList of window BSP_INST_UTIL of form BSP_INST_UTIL;
+		end if;
+	end for;
+	
+	{at this point, we have the old field list intact, the new field list has only items that have been
+	added.  The common field list has those in common.  The ones that have been removed we don't care about,
+	after all- we removed them}
+	
+	{example call sqltext = \"insert  INTO \" + inDB + \"..\" + l_file +  \" \" +
+		\"select \" + return_field_names(table_name,dict_id) + \" \" + 
+		\"FROM \" + \"tempdb..conversion_file\".	}
+	
+	{for this to work, the new columns have to be bound to defaults so let's do that
+	insert into TWO..gpVendor (A,B,C) select (A,B,C) from tempdb..conversion_file}
+	{so bind all the new columns in the table}
+
+	{----------------------------------------------------------------------------------------}
+	for i = 1 to countitems(gpNewFieldList of window BSP_INST_UTIL of form BSP_INST_UTIL) do
+		item_data=itemdata(gpNewFieldList of window BSP_INST_UTIL of form BSP_INST_UTIL,i);
+		default_name = get_bind_type(item_data);
+		call sp_bindefault,returnval,default_name,
+			l_file + \".\" + itemname(gpNewFieldList of window BSP_INST_UTIL of form BSP_INST_UTIL,i);
+	end for;
+	{and get the common ones}
+	for i = 1 to countitems(gpCommonField of window BSP_INST_UTIL of form BSP_INST_UTIL) do
+		item_data=itemdata(gpCommonField of window BSP_INST_UTIL of form BSP_INST_UTIL,i);
+		default_name = get_bind_type(item_data);
+		call sp_bindefault,returnval,default_name,
+			l_file + \".\" + itemname(gpCommonField of window BSP_INST_UTIL of form BSP_INST_UTIL,i);
+	end for;
+	{--------------------------------------------------------------------------------------------------}
+		
+	status = SQL_Terminate(SQL_connection);	
+	status = SQL_Connect(SQL_connection);	
+
+	{finally, make the query to copy all our data back again}
+
+	sqltext =  \"insert  INTO \" + inDB + \"..\" + l_file +  \" (\" +
+		get_field_list(gpCommonField of window BSP_INST_UTIL of form BSP_INST_UTIL) + \") \" +
+		\"select \" + get_field_list(gpCommonField of window BSP_INST_UTIL of form BSP_INST_UTIL) + 
+		\" from tempdb..conversion_file\";
+	status = SQL_Execute(SQL_connection, sqltext);
+	if status <> 0 then
+		throw  22000;
+	end if;	
+	
+	{and get rid of the of the temp file}
+	sqltext = \"drop table tempdb..conversion_file\";
+	status = SQL_Execute(SQL_connection, sqltext);
+	if status <> 0 then
+		throw  22000;
+	end if;		
+	status = SQL_Terminate(SQL_connection);	
+	
+	{now there is the new table, we pass control to another procedure in case there are specific things
+	we need to set after the conversion}
+	
+	{--------------------------------------}
+	call table_specific_updates,
+		table mytable,
+		inDB;
+	{--------------------------------------}
+	
+	{finally, use amAutogrant to grant permissions to DYNGRP}
+
+	{make sure the global script runs in the correct context}
+	set SQLScriptLocation of globals to inDB;
+	{and give the users permissions back to the table again}
+	call amAutoGrant, status,l_file;
+	{and clear it after we're done}
+	clear SQLScriptLocation of globals;		
+end if;
+
+
+catch [22000]
+
+	if status <> 0 then
+		error \"An error occurred executing SQL statements.\";
+		{Retrieve the specific error information.}
+		status = SQL_GetError(SQL_connection, GPS_error_number, SQL_error_number, SQL_error_string, ODBC_error_string);
+		if status = 0 then
+			warning \"GPS Error: \" + str(GPS_error_number);
+			warning \"SQL Error: \" + str(SQL_error_number) + \" \" + SQL_error_string;
+			warning \"ODBC Error: \" + ODBC_error_string;
+		else
+			error \"Unable to retrieve SQL error information.\";
+		end if;
+		status = SQL_Terminate(SQL_connection);
+	else
+		throw;
+	end if;	
+
+end try;
+
+status = SQL_Terminate(SQL_connection);	"
+	ServiceAction	""
+	ServiceCustomAciton	""
+	ServiceEnabled	"FALSE"
+	ServiceRawRequest	"FALSE"
+	ServiceUriTemplate	""
+	UserProperties	""
+}

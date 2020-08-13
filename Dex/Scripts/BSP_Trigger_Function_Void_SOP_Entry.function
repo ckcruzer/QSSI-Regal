@@ -1,0 +1,56 @@
+Function	"BSP_Trigger_Function_Void_SOP_Entry"
+{
+	Core	"Sales"
+	Documentation	""
+	Script	"function	returns	integer	Void;
+
+in			integer					nCallerID;
+inout		SOP_SOState				SOState;
+inout		sopExtPricingPromoWork	sopExtPricingPromoWork;
+in			'SOP Number'			sSOPNumber;
+inout		Changed					fChanged;
+in			'Batch Number'			sBatchNumber;
+in			'SOP Type'				nSOPType;
+in			'Document ID'			sDocumentID;
+in			'Deposit Received'		cyDepositReceived;
+in			'Item Number'			sItemNumber;
+in			'QTY Allocated'			cyQTYAllocated;
+in			'QTY In Base U Of M'	cyQTYInBaseUofM;
+in			'QTY'					cyQTY;
+inout		'Location Code'			sLocationCode;
+inout		table					SOP_ID_SETP;
+inout		table 					SOP_LINE_WORK;
+inout		table 					Batch_Headers;
+inout		table 					SOP_Report_TEMP;
+inout		table 					SOP_Document_SETP;
+inout		table 					SOP_SETP;
+inout		SYPost_Settings			SYPostSettingsVoid;
+inout		GL_PostingInfo			GLPostInfoVoid;
+
+
+
+local	boolean			Stop, Success;
+local	integer			nStatus;
+local	SOP_SOIdxID		SOPSOIdxID;
+local	boolean			l_CardSuccess;
+
+local 'Error Message Text' l_ErrorMessage;
+
+if not isopen(form SOP_Entry) then
+	abort script;
+end if;
+
+nStatus = Void;
+
+if nStatus = SOP_RESTART_FORM_NO_ABORT or nStatus = SOP_RESTART_FORM_AND_CLOSE then
+	call BSP_Trigger_Function_Void_SOP_Entry_Proc, nSOPType, sSOPNumber, nStatus, l_ErrorMessage;
+	if nStatus = OKAY then
+		warning \"Record has been successfully sent to Powerhouse.\";
+	elseif nStatus = 1 then
+		warning \"There was an error processing your request. \" + l_ErrorMessage;
+		abort script;
+	end if;
+end if;
+			"
+	UserProperties	""
+}

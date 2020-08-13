@@ -1,0 +1,40 @@
+Function	"BSP_IsValidSopLines"
+{
+	Core	"Sales"
+	Documentation	""
+	Script	"function	returns	boolean	BSP_IsValidSopLines;
+
+in		integer				nType;			{'SOP Type'}
+in		'SOP Number'		sDoc;			{'SOP Number'}
+
+local 'Requested Ship Date' l_shipdate, l_newdate;
+
+BSP_IsValidSopLines = false;
+
+
+fill l_shipdate;
+
+
+clear table SOP_LINE_WORK;
+'SOP Type' of table SOP_LINE_WORK = nType;
+'SOP Number' of table SOP_LINE_WORK = sDoc;
+range start table SOP_LINE_WORK by SOP_LINE_WORK_Key6;
+
+fill 'Line Item Sequence' of file SOP_LINE_WORK;
+fill 'Component Sequence' of table SOP_LINE_WORK;
+range end table SOP_LINE_WORK by SOP_LINE_WORK_Key6;
+
+get first file SOP_LINE_WORK by SOP_LINE_WORK_Key6;
+while err() = OKAY do
+	if ('Non IV' of table SOP_LINE_WORK = 0) and ('Drop Ship' of table SOP_LINE_WORK = 0) and ('Requested Ship Date' of table SOP_LINE_WORK <> setdate(l_newdate,12,31,2999)) then 
+		BSP_IsValidSopLines = true;
+		range clear file SOP_LINE_WORK;
+		abort script;
+	end if;
+	{Read the next line.}
+	get next file SOP_LINE_WORK by SOP_LINE_WORK_Key6;
+end while;
+range clear file SOP_LINE_WORK;
+"
+	UserProperties	""
+}

@@ -1,0 +1,234 @@
+Procedure	"BSP_CreateMenuItems"
+{
+	Core	"System"
+	Documentation	""
+	Script	"{-----------------------------------------------------------------------
+DESCRIPTION:
+This startup procedure creates the menu structure for the BSP 
+integrating application. 
+------------------------------------------------------------------------
+Copyright (c) Microsoft Corporation. All rights reserved.
+------------------------------------------------------------------------}
+
+in integer LoadMode;
+optional in boolean ShowProgress;
+
+local CmdSequence Seq;
+local integer Status;
+local boolean AddMenuItems;
+
+{Set the flag indicating that menu items should be added}
+AddMenuItems = true;
+
+if LoadMode = MENULOAD_TOTABLE then
+	{Find out whether the menu items exist in the Menu Master table.}
+
+	if MenusExistForProduct(Runtime_GetCurrentProductID()) of form syMenuObj = true then
+		{Do not need to add the menu items}
+		AddMenuItems = false;
+	end if;	
+end if;
+
+if AddMenuItems = true then
+	{Add a separator, which is a built-in command}
+	Seq = 0;
+	Status = AddCommandToMenu(DYNAMICS, 
+		resourceid(form Command_System),
+		resourceid(command CL_Company_Setup of form Command_System),
+		Seq,
+		CMD_BUILTINCMD_DICTID, 
+		CMD_BUILTINCMD_FORMID, 
+		resourceid(command cmdSeparator),
+		true,
+		LoadMode);
+			
+	if Status <> OKAY then
+		error \"Could not add separator item.\";
+	end if;			
+
+	Seq = 0;
+	Status = AddCommandToMenu(DYNAMICS, 
+		resourceid(form Command_System), 
+		resourceid(command CL_Company_Setup of form Command_System),
+		Seq,
+		Runtime_GetCurrentProductID(),
+		resourceid(form Command_BSP),
+		resourceid(command BSP_Integration_Setup of form Command_BSP),
+		true,
+		LoadMode);
+
+	if Status <> OKAY then
+		error \"Could not add command BSP_Integration_Setup of form Command_BSP.\";
+	end if;
+	
+	Seq = 0;
+	Status = AddCommandToMenu(DYNAMICS, 
+		resourceid(form Command_System),
+		resourceid(command CL_System_Setup of form Command_System),
+		Seq,
+		CMD_BUILTINCMD_DICTID, 
+		CMD_BUILTINCMD_FORMID, 
+		resourceid(command cmdSeparator),
+		true,
+		LoadMode);
+			
+	if Status <> OKAY then
+		error \"Could not add separator item.\";
+	end if;			
+
+	Seq = 0;
+	Status = AddCommandToMenu(DYNAMICS, 
+		resourceid(form Command_System), 
+		resourceid(command CL_System_Setup of form Command_System),
+		Seq,
+		Runtime_GetCurrentProductID(),
+		resourceid(form Command_BSP),
+		resourceid(command 'BSP Create Tables' of form Command_BSP),
+		true,
+		LoadMode);
+
+	if Status <> OKAY then
+		error \"Could not add command 'BSP Create Tables' of form Command_BSP.\";
+	end if;
+	
+	Seq = 0;
+	Status = AddCommandToMenu(DYNAMICS, 
+		resourceid(form Command_System), 
+		resourceid(command CL_System_Setup of form Command_System),
+		Seq,
+		Runtime_GetCurrentProductID(),
+		resourceid(form Command_BSP),
+		resourceid(command BSP_About of form Command_BSP),
+		true,
+		LoadMode);
+
+	if Status <> OKAY then
+		error \"Could not add command BSP_About of form Command_BSP.\";
+	end if;
+	
+	Seq = 0;
+	Status = AddCommandToMenu(DYNAMICS, 
+		resourceid(form Command_Inventory),
+		resourceid(command CL_Inventory_Setup of form Command_Inventory),
+		Seq,
+		CMD_BUILTINCMD_DICTID, 
+		CMD_BUILTINCMD_FORMID, 
+		resourceid(command cmdSeparator),
+		true,
+		LoadMode);
+			
+	if Status <> OKAY then
+		error \"Could not add separator item.\";
+	end if;			
+
+	Seq = 0;
+	Status = AddCommandToMenu(DYNAMICS, 
+		resourceid(form Command_Inventory), 
+		resourceid(command CL_Inventory_Setup of form Command_Inventory),
+		Seq,
+		Runtime_GetCurrentProductID(),
+		resourceid(form Command_BSP),
+		resourceid(command BSP_Powerhouse_Location_Mapping of form Command_BSP),
+		true,
+		LoadMode);
+
+	if Status <> OKAY then
+		error \"Could not add command BSP_Powerhouse_Location_Mapping of form Command_BSP.\";
+	end if;
+	
+	{Receiving Integration}
+	Seq = 0;
+	Status = AddCommandToMenu(DYNAMICS, 
+		resourceid(form Command_Purchasing), 
+		resourceid(command CL_Purchasing_Transactions of form Command_Purchasing),
+		Seq,
+		Runtime_GetCurrentProductID(),
+		resourceid(form Command_BSP),
+		resourceid(command BSP_POP_Receiving_Integration of form Command_BSP),
+		true,
+		LoadMode);
+
+	if Status <> OKAY then
+		error \"Could not add command BSP_POP_Receiving_Integration of form Command_BSP.\";
+	end if;
+	
+	{Receiving Maintenance}
+	Seq = 0;
+	Status = AddCommandToMenu(DYNAMICS, 
+		resourceid(form Command_Purchasing), 
+		resourceid(command CL_Purchasing_Cards of form Command_Purchasing),
+		Seq,
+		Runtime_GetCurrentProductID(),
+		resourceid(form Command_BSP),
+		resourceid(command BSP_POP_Receiving_Integration_Maintenance of form Command_BSP),
+		true,
+		LoadMode);
+
+	if Status <> OKAY then
+		error \"Could not add command BSP_POP_Receiving_Integration_Maintenance of form Command_BSP.\";
+	end if;
+	
+	{PO Inquiry}
+	Seq = 0;
+	Status = AddCommandToMenu(DYNAMICS, 
+		resourceid(form Command_Purchasing), 
+		resourceid(command CL_Purchasing_Inquiry of form Command_Purchasing),
+		Seq,
+		Runtime_GetCurrentProductID(),
+		resourceid(form Command_BSP),
+		resourceid(command BSP_POP_PO_Transfer_Integration_Inquiry of form Command_BSP),
+		true,
+		LoadMode);
+
+	if Status <> OKAY then
+		error \"Could not add command BSP_POP_PO_Transfer_Integration_Inquiry of form Command_BSP.\";
+	end if;
+	
+	{SOP Inquiry}	
+	Seq = 0;
+	Status = AddCommandToMenu(DYNAMICS, 
+		resourceid(form Command_Sales), 
+		resourceid(command CL_Sales_Inquiry of form Command_Sales),
+		Seq,
+		Runtime_GetCurrentProductID(),
+		resourceid(form Command_BSP),
+		resourceid(command BSP_SOP_Entry_Integration_Inquiry of form Command_BSP),
+		true,
+		LoadMode);
+
+	if Status <> OKAY then
+		error \"Could not add command BSP_SOP_Entry_Integration_Inquiry of form Command_BSP.\";
+	end if;
+	
+	
+	Seq = FindCommandInMenu(DYNAMICS,
+		resourceid(form Command_System),
+		resourceid(command CL_Toolbars of form Command_System),
+		DYNAMICS,
+		resourceid(form Command_System),
+		resourceid(command Toolbar_Custom of form Command_System),
+		LoadMode,
+		\"\");
+	
+	Status = AddCommandToMenu(DYNAMICS,
+		resourceid(form Command_System),
+		resourceid(command CL_Toolbars of form Command_System),
+		Seq,
+		Runtime_GetCurrentProductID(),
+		resourceid(form Command_BSP),
+		resourceid(command Toolbar_BSP of form Command_BSP),
+		true,
+		LoadMode);
+
+	if Status <> OKAY then
+		error \"Could not add command Toolbar-BSP.\";
+	end if;		
+end if;
+				"
+	ServiceAction	""
+	ServiceCustomAciton	""
+	ServiceEnabled	"FALSE"
+	ServiceRawRequest	"FALSE"
+	ServiceUriTemplate	""
+	UserProperties	""
+}
