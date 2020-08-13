@@ -1,0 +1,67 @@
+Procedure	"table_specific_updates"
+{
+	Core	"System"
+	Documentation	""
+	Script	"{we might want the table or might not want the table depending on what we
+need to do with the new columns.  So pass in buffer just in case}
+inout anonymous table mytable;
+in string inDB;
+
+local long GPS_error_number,SQL_connection,SQL_error_number,returnval;
+local string SQL_error_string, ODBC_error_string;
+local text sqltext;
+local long status;
+
+local string table_name;
+local string l_file;
+
+try 
+
+status = SQL_Connect(SQL_connection);
+
+{at this time the NewFieldList on the conversion window has the new fields and the itemdata() for the listbox
+value tells us what type it is.  For datetime fields under sql, we don't necessarily KNOW whether this is actually
+a date or time under Dexterity.  But for this type of conversion, we'd likely have a specific value we want to default
+to anyway.  In the case for gpVendor, we'll set the new date field to today's date}
+table_name = technicalname(table mytable);
+l_file = physicalname(table mytable);
+case table_name
+	in [\"BSP_Location_MSTR\"]
+		{update existing data}	
+		{sqltext = \"UPDATE \" + inDB + \"..\" + l_file + \" SET LONGNAME = LOCATNNM\";
+		status = SQL_Execute(SQL_connection, sqltext);
+		if status <> 0 then
+			throw  22000;
+		end if;}
+			
+	else
+end case;
+
+catch [22000]
+
+	if status <> 0 then
+		error \"An error occurred executing SQL statements.\";
+		{Retrieve the specific error information.}
+		status = SQL_GetError(SQL_connection, GPS_error_number, SQL_error_number, SQL_error_string, ODBC_error_string);
+		if status = 0 then
+			warning \"GPS Error: \" + str(GPS_error_number);
+			warning \"SQL Error: \" + str(SQL_error_number) + \" \" + SQL_error_string;
+			warning \"ODBC Error: \" + ODBC_error_string;
+		else
+			error \"Unable to retrieve SQL error information.\";
+		end if;
+		status = SQL_Terminate(SQL_connection);
+	else
+		throw;
+	end if;	
+
+end try;	
+
+status = SQL_Terminate(SQL_connection);	"
+	ServiceAction	""
+	ServiceCustomAciton	""
+	ServiceEnabled	"FALSE"
+	ServiceRawRequest	"FALSE"
+	ServiceUriTemplate	""
+	UserProperties	""
+}

@@ -1,0 +1,298 @@
+Form	"BSP_About"
+{
+	Commands
+	{
+	}
+	ConfigurableMenus	"false"
+	Constants
+	{
+	}
+	Datatypes
+	{
+	}
+	EventPost	""
+	EventPre	""
+	Fields
+	{
+		Field	"BSP_VersionNumber"		
+		{
+			ArraySize	"0"
+			Datatype	"STR100"
+			LookupForm	""
+			PhysicalName	""
+		}
+	}
+	Menus
+	{
+	}
+	Series	"Company"
+	Tables
+	{
+	}
+	Windows
+	{
+		Window	"BSP_About"		
+		{
+			AutoLinkTable	""
+			AutoOpen	"true"
+			BackGround	"true"
+			CloseBox	"true"
+			ControlArea	"true"
+			DisplayName	"About BSP Customizations"
+			EventActivate	""
+			EventContextMenu	""
+			EventPost	""
+			EventPre	"BSP_About_WIN_PRE"
+			EventPrint	""
+			Fields
+			{
+				WindowControl	"(L) BSP_VersionNumber"				
+				{
+					Alignment	"left"
+					Appearance	"2D Border"
+					AutoComplete	"false"
+					AutoCopy	"false"
+					BackColor	"System - Window Background"
+					Border	"true"
+					ControlType	"String"
+					DisableLookup	"false"
+					Editable	"false"
+					EventChange	""
+					EventContextMenu	""
+					EventMouseEnter	""
+					EventMouseExit	""
+					EventOther	""
+					EventPost	""
+					EventPre	""
+					Field	"(L) BSP_VersionNumber"
+					Font	"System (generic)"
+					FontBold	"false"
+					FontColor	"System - Window Text"
+					FontItalic	"false"
+					FontUnderline	"false"
+					LinkedFormat	"0"
+					LinkedLookup	"0"
+					LinkedPrompt	"0"
+					Password	"false"
+					Pattern	"(none)"
+					PatternColor	"White"
+					PositionLeft	"232"
+					PositionTop	"57"
+					ReadingOrder	"LeftToRight"
+					Required	"false"
+					ResizeHoriz	"StayLeft"
+					ResizeVert	"StayTop"
+					SavedOnRestart	"false"
+					SetChangeFlag	"true"
+					SizeHeight	"20"
+					SizeWidth	"112"
+					TabStop	"true"
+					Tag	"2"
+					Tooltip	""
+					UseUniqueHelp	"true"
+					Visible	"true"
+					ZOrder	"0"
+					Zoom	"false"
+				}
+				WindowPicture	"3"				
+				{
+					BackColor	"White"
+					Picture	"BSP_Logo"
+					PositionLeft	"0"
+					PositionTop	"38"
+					ResizeHoriz	"StayLeft"
+					ResizeVert	"StayTop"
+					SizeHeight	"105"
+					SizeWidth	"120"
+					Tag	"3"
+					ZOrder	"1"
+				}
+				WindowPrompt	"4"				
+				{
+					Alignment	"left"
+					Appearance	"2D Border"
+					BackColor	"System - Button Face"
+					Border	"false"
+					Font	"System (generic)"
+					FontBold	"false"
+					FontColor	"System - Button Text"
+					FontItalic	"false"
+					FontUnderline	"false"
+					Pattern	"(none)"
+					PatternColor	"White"
+					PositionLeft	"136"
+					PositionTop	"38"
+					ReadingOrder	"LeftToRight"
+					ResizeHoriz	"StayLeft"
+					ResizeVert	"StayTop"
+					SizeHeight	"20"
+					SizeWidth	"213"
+					Text	"Business Solutions Partners Customizations"
+					Visible	"true"
+					ZOrder	"2"
+					Zoom	"false"
+				}
+				WindowPrompt	"5"				
+				{
+					Alignment	"left"
+					Appearance	"2D Border"
+					BackColor	"System - Button Face"
+					Border	"false"
+					Font	"System (generic)"
+					FontBold	"false"
+					FontColor	"System - Button Text"
+					FontItalic	"false"
+					FontUnderline	"false"
+					Pattern	"(none)"
+					PatternColor	"White"
+					PositionLeft	"136"
+					PositionTop	"57"
+					ReadingOrder	"LeftToRight"
+					ResizeHoriz	"StayLeft"
+					ResizeVert	"StayTop"
+					SizeHeight	"20"
+					SizeWidth	"96"
+					Text	"Version Number: "
+					Visible	"true"
+					ZOrder	"3"
+					Zoom	"false"
+				}
+				WindowPrompt	"6"				
+				{
+					Alignment	"left"
+					Appearance	"2D Border"
+					BackColor	"System - Button Face"
+					Border	"false"
+					Font	"System (generic)"
+					FontBold	"false"
+					FontColor	"System - Button Text"
+					FontItalic	"false"
+					FontUnderline	"false"
+					Pattern	"(none)"
+					PatternColor	"White"
+					PositionLeft	"136"
+					PositionTop	"104"
+					ReadingOrder	"LeftToRight"
+					ResizeHoriz	"StayLeft"
+					ResizeVert	"StayTop"
+					SizeHeight	"39"
+					SizeWidth	"208"
+					Text	"Please visit https://www.bspny.com for more information"
+					Visible	"true"
+					ZOrder	"4"
+					Zoom	"false"
+				}
+				WindowLine	"7"				
+				{
+					Appearance	"3D Border"
+					LineColor	"System"
+					LineSize	"1"
+					PositionLeft	"0"
+					PositionTop	"24"
+					ResizeHoriz	"StayLeft"
+					ResizeVert	"StayTop"
+					SizeHeight	"0"
+					SizeWidth	"448"
+					ZOrder	"5"
+				}
+				WindowLine	"9"				
+				{
+					Appearance	"3D Border"
+					LineColor	"System"
+					LineSize	"1"
+					PositionLeft	"72"
+					PositionTop	"3"
+					ResizeHoriz	"StayLeft"
+					ResizeVert	"StayTop"
+					SizeHeight	"16"
+					SizeWidth	"0"
+					ZOrder	"7"
+				}
+				WindowControl	"OK Button"				
+				{
+					Alignment	"center"
+					Appearance	"3D Highlight"
+					BackColor	"System - Toolbar"
+					Border	"true"
+					ButtonStyle	"TextOnRight"
+					Cancel	"false"
+					ControlType	"PushButton"
+					Default	"true"
+					Editable	"true"
+					EndTransaction	"false"
+					EventChange	"BSP_About OK Button_CHG"
+					EventContextMenu	""
+					EventMouseEnter	""
+					EventMouseExit	""
+					EventOther	""
+					EventPost	""
+					EventPre	""
+					Field	"OK Button"
+					Font	"System (generic)"
+					FontBold	"false"
+					FontColor	"System - Button Text"
+					FontItalic	"false"
+					FontUnderline	"false"
+					HyperSpace	"false"
+					LinkedLookup	"0"
+					LinkedPrompt	"0"
+					Pattern	"(none)"
+					PatternColor	"White"
+					PositionLeft	"0"
+					PositionTop	"0"
+					ResizeHoriz	"StayLeft"
+					ResizeVert	"StayTop"
+					SizeHeight	"24"
+					SizeWidth	"72"
+					TabStop	"true"
+					Tag	"8"
+					Tooltip	""
+					UseUniqueHelp	"true"
+					Visible	"true"
+					ZOrder	"6"
+					Zoom	"false"
+				}
+			}
+			LastTag	"9"
+			Position	"1"
+			PositionLeft	"1"
+			PositionTop	"1"
+			Resizable	"true"
+			SizeHeight	"159"
+			SizeWidth	"354"
+			WindowType	"Primary"
+		}
+	}
+	~EventScripts
+	{
+		EventScript	"BSP_About OK Button_CHG"		
+		{
+			Documentation	""
+			Script	"close form BSP_About;"
+			UserProperties	""
+		}
+		EventScript	"BSP_About_WIN_PRE"		
+		{
+			Documentation	""
+			Script	"local integer major_version, minor_version, build_number;
+
+ 
+
+{Read the version information for the module 001.}
+major_version = Runtime_GetModuleInfo(11021, 051, minor_version, build_number);
+
+ 
+
+{Display the version information.}
+set '(L) BSP_VersionNumber' to
+ str(major_version) +  \".\" + str(minor_version) + \".\" + str(build_number);"
+			UserProperties	""
+		}
+	}
+	~Functions
+	{
+	}
+	~Procedures
+	{
+	}
+}

@@ -1,0 +1,74 @@
+Procedure	"BSP_SOP_Scroll_Split_Line"
+{
+	Core	"Sales"
+	Documentation	""
+	Script	"in 'SOP Type'			IN_SopType;
+in 'SOP Number' 		IN_SopNumber;
+in 'Component Sequence' IN_CompSeq;
+in 'Line Item Sequence' IN_LineItemSeq;
+in 'Item Number' 		IN_ItemNumber;
+in 'QTY To Back Order' 	IN_BkOrdQty;
+in integer 				IN_Source;
+
+if empty(IN_ItemNumber) then
+	call Warning_Dialog, 1, \"Please select a line item and try again.\", \"\", \"\";
+	abort script;
+end if;
+
+if IN_BkOrdQty = 0 then
+	call Warning_Dialog, 1, \"This line doesn't have back order quantity. you can't split this line.\", \"\", \"\";
+	abort script;
+end if;
+
+if IN_SopType <> SOP_ORDER then
+	call Warning_Dialog, 1, \"You can only split lines on documents with type order.\", \"\", \"\";
+	abort script;
+end if;
+
+if(IN_CompSeq > 0) then
+	call Warning_Dialog, 1, \"You can not split kit component.\", \"\", \"\";
+	abort script;
+end if;
+
+release table IV_Item_MSTR;
+set 'Item Number' of table IV_Item_MSTR to IN_ItemNumber;
+get table IV_Item_MSTR;
+if err() <> MISSING then
+	if ('Item Type' of file IV_Item_MSTR = IV_KIT) then
+		call Warning_Dialog, 1, \"You cannot split a line on a kit item.\", \"\", \"\";
+		abort script;
+	elseif ('Item Type' of file IV_Item_MSTR <> IV_SALES_INVENTORY and 'Item Type' of file IV_Item_MSTR <> IV_DISCONTINUED) then
+		call Warning_Dialog, 1,\"You cannot split a line on a non sales inventory item.\", \"\", \"\";
+		abort script;
+	end if;
+else
+	call Warning_Dialog, 1, \"You cannot split a line on a non inventory item.\", \"\", \"\";
+	abort script;
+end if;
+	
+if '(L) Dropship' of window Line_Scroll of form SOP_Entry then
+	call Warning_Dialog, 1, \"You cannot split a line on a drop ship item.\", \"\", \"\";
+	abort script;
+end if;
+
+
+if IN_BkOrdQty > 0 then
+	{call OPEN of form BSP_SOP_QTY_Breakdown, 
+		IN_SopType,
+		IN_SopNumber, 
+		IN_CompSeq, 
+		IN_LineItemSeq, 
+		IN_Source,
+		true;}
+	abort script;
+end if;
+
+
+"
+	ServiceAction	""
+	ServiceCustomAciton	""
+	ServiceEnabled	"FALSE"
+	ServiceRawRequest	"FALSE"
+	ServiceUriTemplate	""
+	UserProperties	""
+}

@@ -1,0 +1,212 @@
+Table	"BSP_Powerhouse_Receiving_Transfer"
+{
+	AllowActiveLocking	"false"
+	DatabaseType	"Default"
+	DexRowTimestamp	"false"
+	DisplayName	"BSP Powerhouse Receiving Transfer"
+	FourByteHeader	"true"
+	PhysicalName	"BSP_Powerhouse_RCV_TRSFR"
+	Restriction	""
+	Series	"Purchasing"
+	TableType	"Standard"
+	~Fields
+	{
+		TableField	"Actual Ship Date"		
+		{
+			Encrypt	"false"
+			Field	"Actual Ship Date"
+			Position	"8"
+		}
+		TableField	"BSP_ContainerID"		
+		{
+			Encrypt	"false"
+			Field	"BSP_ContainerID"
+			Position	"0"
+		}
+		TableField	"Date Sent"		
+		{
+			Encrypt	"false"
+			Field	"Date Sent"
+			Position	"15"
+		}
+		TableField	"Item Description"		
+		{
+			Encrypt	"false"
+			Field	"Item Description"
+			Position	"4"
+		}
+		TableField	"Item Number"		
+		{
+			Encrypt	"false"
+			Field	"Item Number"
+			Position	"3"
+		}
+		TableField	"Location Code"		
+		{
+			Encrypt	"false"
+			Field	"Location Code"
+			Position	"12"
+		}
+		TableField	"PO Number"		
+		{
+			Encrypt	"false"
+			Field	"PO Number"
+			Position	"2"
+		}
+		TableField	"POP Receipt Number"		
+		{
+			Encrypt	"false"
+			Field	"POP Receipt Number"
+			Position	"1"
+		}
+		TableField	"Promised Date"		
+		{
+			Encrypt	"false"
+			Field	"Promised Date"
+			Position	"9"
+		}
+		TableField	"QTY Shipped"		
+		{
+			Encrypt	"false"
+			Field	"QTY Shipped"
+			Position	"10"
+		}
+		TableField	"Requested By"		
+		{
+			Encrypt	"false"
+			Field	"Requested By"
+			Position	"14"
+		}
+		TableField	"Shipping Method"		
+		{
+			Encrypt	"false"
+			Field	"Shipping Method"
+			Position	"13"
+		}
+		TableField	"Time Sent"		
+		{
+			Encrypt	"false"
+			Field	"Time Sent"
+			Position	"16"
+		}
+		TableField	"U Of M"		
+		{
+			Encrypt	"false"
+			Field	"U Of M"
+			Position	"11"
+		}
+		TableField	"U Of M QTY In Base"		
+		{
+			Encrypt	"false"
+			Field	"U Of M QTY In Base"
+			Position	"7"
+		}
+		TableField	"Vendor Item Description"		
+		{
+			Encrypt	"false"
+			Field	"Vendor Item Description"
+			Position	"6"
+		}
+		TableField	"Vendor Item Number"		
+		{
+			Encrypt	"false"
+			Field	"Vendor Item Number"
+			Position	"5"
+		}
+	}
+	~Keys
+	{
+		Key	"BSP_Powerhouse_Receiving_Transfer_Key1"		
+		{
+			Clustered	"false"
+			Compress	"false"
+			CreateIndex	"true"
+			DisableDeletes	"false"
+			DisableFirsts	"false"
+			DisableGets	"false"
+			DisableInserts	"false"
+			DisableLasts	"false"
+			DisableNexts	"false"
+			Duplicates	"false"
+			Modifiable	"false"
+			Position	"0"
+			Primary	"true"
+			Segments
+			{
+				KeySegment	"BSP_ContainerID"				
+				{
+					Component	""
+					Descending	"false"
+					IgnoreCase	"true"
+					NoCombining	"false"
+					NoLengthByte	"false"
+					Position	"0"
+				}
+				KeySegment	"Item Number"				
+				{
+					Component	""
+					Descending	"false"
+					IgnoreCase	"true"
+					NoCombining	"false"
+					NoLengthByte	"false"
+					Position	"3"
+				}
+				KeySegment	"PO Number"				
+				{
+					Component	""
+					Descending	"false"
+					IgnoreCase	"true"
+					NoCombining	"false"
+					NoLengthByte	"false"
+					Position	"2"
+				}
+				KeySegment	"POP Receipt Number"				
+				{
+					Component	""
+					Descending	"false"
+					IgnoreCase	"true"
+					NoCombining	"false"
+					NoLengthByte	"false"
+					Position	"1"
+				}
+			}
+		}
+	}
+	~Relationships
+	{
+		Relationship	"POP_PA_ReceiptLine_View"		
+		{
+			Fields
+			{
+				RelationshipField	"00000"				
+				{
+					Field	"POP Receipt Number"
+				}
+				RelationshipField	"00001"				
+				{
+					Field	"Receipt Line Number"
+				}
+			}
+			Key	"1 ; POPPARcptLineViewIdx_RcptNumByLineNum"
+			RelatedTable	"POP_PA_ReceiptLine_View"
+			RelationshipType	"OneToOne"
+		}
+		Relationship	"POP_ShipIvcApply"		
+		{
+			Fields
+			{
+				RelationshipField	"00000"				
+				{
+					Field	"POP Receipt Number"
+				}
+				RelationshipField	"00001"				
+				{
+					Field	"Receipt Line Number"
+				}
+			}
+			Key	"1 ; POP_ShipIvcApplyIdxID"
+			RelatedTable	"POP_ShipIvcApply"
+			RelationshipType	"OneToMany"
+		}
+	}
+}

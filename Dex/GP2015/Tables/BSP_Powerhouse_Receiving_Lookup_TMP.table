@@ -1,0 +1,55 @@
+Table	"BSP_Powerhouse_Receiving_Lookup_TMP"
+{
+	AllowActiveLocking	"false"
+	DatabaseType	"SQL"
+	DexRowTimestamp	"false"
+	DisplayName	"BSP Powerhouse Receiving Transfer Lookup Temp"
+	FourByteHeader	"true"
+	PhysicalName	"TEMP"
+	Restriction	""
+	Series	"Purchasing"
+	TableType	"Standard"
+	~Fields
+	{
+		TableField	"BSP_ContainerID"		
+		{
+			Encrypt	"false"
+			Field	"BSP_ContainerID"
+			Position	"0"
+		}
+	}
+	~Keys
+	{
+		Key	"BSP_Powerhouse_Receiving_Lookup_TMP_Key1"		
+		{
+			Clustered	"false"
+			Compress	"false"
+			CreateIndex	"true"
+			DisableDeletes	"false"
+			DisableFirsts	"false"
+			DisableGets	"false"
+			DisableInserts	"false"
+			DisableLasts	"false"
+			DisableNexts	"false"
+			Duplicates	"false"
+			Modifiable	"true"
+			Position	"0"
+			Primary	"true"
+			Segments
+			{
+				KeySegment	"BSP_ContainerID"				
+				{
+					Component	""
+					Descending	"false"
+					IgnoreCase	"true"
+					NoCombining	"false"
+					NoLengthByte	"false"
+					Position	"0"
+				}
+			}
+		}
+	}
+	~Relationships
+	{
+	}
+}

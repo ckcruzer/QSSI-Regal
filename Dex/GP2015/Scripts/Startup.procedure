@@ -1,0 +1,89 @@
+Procedure	"Startup"
+{
+	Core	"Sales"
+	Documentation	""
+	Script	"local integer l_result;
+
+{---------------------------------------------------------------
+Triggers for managing commands and command forms
+----------------------------------------------------------------}
+l_result = Trigger_RegisterProcedure(script OpenCommandForms, TRIGGER_AFTER_ORIGINAL, script BSP_OpenCommandForm);
+if l_result <> SY_NOERR then
+	warning \"Procedure BSP_OpenCommandForm trigger registration failed.\";
+end if;
+
+l_result = Trigger_RegisterProcedure(script CloseCommandForms, TRIGGER_AFTER_ORIGINAL, script BSP_CloseCommandForm);
+if l_result <> SY_NOERR then
+	warning \"Procedure BSP_CloseCommandForm trigger registration failed.\";
+end if;
+
+
+{---------------------------------------------------------------
+Registering the menu creation procedure
+----------------------------------------------------------------}
+l_result = Trigger_RegisterProcedure(script
+CreateDefaultMenuStructure, TRIGGER_AFTER_ORIGINAL, script BSP_CreateMenuItems);
+
+if l_result <> SY_NOERR then
+	warning \"BSP_CreateMenuItems Procedure trigger registration failed.\";
+end if;
+
+{-------------------------------------------------------------
+Trigers for managing toolbars
+--------------------------------------------------------------}
+l_result = Trigger_RegisterProcedure(script CreateDefaultCommandBars, TRIGGER_AFTER_ORIGINAL, script BSP_CreateToolbars);
+if l_result <> SY_NOERR then
+	warning \"Procedure BSP_CreateToolbars trigger registration failed.\";
+end if;
+
+l_result = Trigger_RegisterProcedure(script CreateDefaultCmdBarButtons, TRIGGER_AFTER_ORIGINAL, script BSP_CreateToolbarItems);
+if l_result <> SY_NOERR then
+	warning \"Procedure BSP_CreateToolbarItems trigger registration failed.\";
+end if;
+
+l_result = Trigger_RegisterProcedure(script LoadCommandBars, TRIGGER_AFTER_ORIGINAL, script BSP_SetToolbarMenuState);
+if l_result <> SY_NOERR then
+	warning \"Procedure BSP_SetToolbarMenuState trigger registration failed.\";
+end if; 
+
+l_result = Trigger_RegisterFunction(function Delete of form SOP_Entry, TRIGGER_AFTER_ORIGINAL, function BSP_Trigger_Function_Delete_SOP_Entry);
+if l_result <> SY_NOERR then
+	warning \"Function BSP_Trigger_Function_Delete_SOP_Entry trigger registration failed.\";
+end if; 
+
+l_result = Trigger_RegisterFunction(function Void of form SOP_Entry, TRIGGER_AFTER_ORIGINAL, function BSP_Trigger_Function_Void_SOP_Entry);
+if l_result <> SY_NOERR then
+	warning \"Function BSP_Trigger_Function_Void_SOP_Entry trigger registration failed.\";
+end if; 
+
+l_result = Trigger_RegisterForm(form SOP_Entry, \"Powerhouse\", \"S\", script BSP_Open_SOP_Entry_Integration);
+if l_result <> SY_NOERR then
+	warning \"Form trigger BSP_Open_SOP_Entry_Integration registration failed.\";
+end if;
+
+l_result = Trigger_RegisterForm(form SOP_Inquiry, \"Powerhouse\", \"S\", script BSP_Open_SOP_Inquiry_Integration);
+if l_result <> SY_NOERR then
+	warning \"Form trigger BSP_Open_SOP_Inquiry_Integration registration failed.\";
+end if;
+
+l_result = Trigger_RegisterForm(form POP_PO_Entry, \"Powerhouse\", \"S\", script BSP_Open_POP_PO_Entry_Integration);
+if l_result <> SY_NOERR then
+	warning \"Form trigger BSP_Open_POP_PO_Entry_Integration registration failed.\";
+end if;
+
+l_result = Trigger_RegisterForm(form POP_Inquiry_PO_Entry, \"Powerhouse\", \"S\", script BSP_Open_POP_Inquiry_PO_Entry_Integration);
+if l_result <> SY_NOERR then
+	warning \"Form trigger BSP_Open_POP_Inquiry_PO_Entry_Integration registration failed.\";
+end if;
+
+l_result = Trigger_RegisterForm(form IV_Item_Maintenance, \"Powerhouse\", \"S\", script BSP_Open_IV_Item_Maintenance_Integration);
+if l_result <> SY_NOERR then
+	warning \"Form trigger BSP_Open_IV_Item_Maintenance_Integration registration failed.\";
+end if;"
+	ServiceAction	""
+	ServiceCustomAciton	""
+	ServiceEnabled	"FALSE"
+	ServiceRawRequest	"FALSE"
+	ServiceUriTemplate	""
+	UserProperties	""
+}

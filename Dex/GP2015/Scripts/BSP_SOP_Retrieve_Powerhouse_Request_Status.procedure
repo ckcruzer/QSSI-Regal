@@ -1,0 +1,15 @@
+Procedure	"BSP_SOP_Retrieve_Powerhouse_Request_Status"
+{
+	Core	"Sales"
+	Documentation	""
+	Script	"if isopen(form SOP_Entry) then
+	{set BSP_SopSentToPowerhouse of window SOP_Entry of form SOP_Entry to 
+		SopAlreadySentToPowerhouse(SOPTypeToInt('SOP Type' of window SOP_Entry of form SOP_Entry), 'SOP Number' of window SOP_Entry of form SOP_Entry);}
+end if;"
+	ServiceAction	""
+	ServiceCustomAciton	""
+	ServiceEnabled	"FALSE"
+	ServiceRawRequest	"FALSE"
+	ServiceUriTemplate	""
+	UserProperties	""
+}

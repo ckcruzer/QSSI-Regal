@@ -1,0 +1,869 @@
+Form	"BSP_IV_Item_Maintenance_Integration"
+{
+	Commands
+	{
+	}
+	ConfigurableMenus	"false"
+	Constants
+	{
+	}
+	Datatypes
+	{
+		Datatype	"Integration Status"		
+		{
+			AllowOddLength	"false"
+			Control	"String"
+			Format	""
+			KeyableLength	"50"
+			StorageLength	"52"
+		}
+		Datatype	"Send to Powerhouse"		
+		{
+			Control	"PushButton"
+			DefaultDown	"00000"
+			DefaultMouseOver	"00000"
+			DefaultUp	"00001"
+			Prompt	"Send to Powerhouse"
+			PromptDown	""
+			PromptMouseOver	""
+			StaticType	"Picture"
+			~ItemImages
+			{
+				PictItem	"00001"				
+				{
+					Item	"WindowToolbar_Transfer_PB_Up"
+				}
+			}
+		}
+		Datatype	"ServiceSendToPowerhouse"		
+		{
+			Control	"Boolean"
+		}
+	}
+	EventPost	""
+	EventPre	""
+	Fields
+	{
+		Field	"Integration Status"		
+		{
+			ArraySize	"0"
+			Datatype	"(L) Integration Status"
+			LookupForm	""
+			PhysicalName	""
+		}
+		Field	"Send to Powerhouse"		
+		{
+			ArraySize	"0"
+			Datatype	"(L) Send to Powerhouse"
+			LookupForm	""
+			PhysicalName	""
+		}
+		Field	"ServiceSendToPowerhouse"		
+		{
+			ArraySize	"0"
+			Datatype	"(L) ServiceSendToPowerhouse"
+			LookupForm	""
+			PhysicalName	""
+		}
+	}
+	Menus
+	{
+	}
+	Series	"Inventory"
+	Tables
+	{
+		FormTable	"BSP_Powerhouse_Item_Transfer"		
+		{
+			AutoOpen	"false"
+			CursorBlockSize	"0"
+			OpenMode	"ReadWrite"
+			Position	"1"
+			Table	"BSP_Powerhouse_Item_Transfer"
+		}
+	}
+	Windows
+	{
+		Window	"BSP_IV_Item_Maintenance_Integration"		
+		{
+			AutoLinkTable	""
+			AutoOpen	"true"
+			BackGround	"true"
+			CloseBox	"true"
+			ControlArea	"true"
+			DisplayName	"Powerhouse Item Integration"
+			EventActivate	""
+			EventContextMenu	""
+			EventPost	""
+			EventPre	"BSP_IV_Item_Maintenance_Integration_WIN_PRE"
+			EventPrint	""
+			Fields
+			{
+				WindowControl	"(L) Send to Powerhouse"				
+				{
+					Alignment	"center"
+					Appearance	"3D Highlight"
+					BackColor	"System - Toolbar"
+					Border	"true"
+					ButtonStyle	"TextOnRight"
+					Cancel	"false"
+					ControlType	"PushButton"
+					Default	"false"
+					Editable	"true"
+					EndTransaction	"false"
+					EventChange	"BSP_IV_Item_Maintenance_Integration l_Send to Powerhouse_CHG"
+					EventContextMenu	""
+					EventMouseEnter	""
+					EventMouseExit	""
+					EventOther	""
+					EventPost	""
+					EventPre	""
+					Field	"(L) Send to Powerhouse"
+					Font	"System (generic)"
+					FontBold	"false"
+					FontColor	"System - Button Text"
+					FontItalic	"false"
+					FontUnderline	"false"
+					HyperSpace	"false"
+					LinkedLookup	"0"
+					LinkedPrompt	"0"
+					Pattern	"(none)"
+					PatternColor	"White"
+					PositionLeft	"0"
+					PositionTop	"0"
+					ResizeHoriz	"StayLeft"
+					ResizeVert	"StayTop"
+					SizeHeight	"24"
+					SizeWidth	"144"
+					TabStop	"true"
+					Tag	"4"
+					Tooltip	""
+					UseUniqueHelp	"true"
+					Visible	"true"
+					ZOrder	"1"
+					Zoom	"false"
+				}
+				WindowControl	"(L) ServiceSendToPowerhouse"				
+				{
+					Appearance	"2D Border"
+					AutoCopy	"false"
+					BackColor	"White"
+					ControlType	"Boolean"
+					EventChange	"BSP_IV_Item_Maintenance_Integration l_ServiceSendToPowerhouse_CHG"
+					EventContextMenu	""
+					EventMouseEnter	""
+					EventMouseExit	""
+					EventOther	""
+					Field	"(L) ServiceSendToPowerhouse"
+					FontColor	"System"
+					PositionLeft	"24"
+					PositionTop	"186"
+					SavedOnRestart	"false"
+					SizeHeight	"20"
+					SizeWidth	"144"
+					Tag	"26"
+					ZOrder	"18"
+				}
+				WindowLine	"1"				
+				{
+					Appearance	"3D Border"
+					LineColor	"System"
+					LineSize	"1"
+					PositionLeft	"0"
+					PositionTop	"24"
+					ResizeHoriz	"StayLeft"
+					ResizeVert	"StayTop"
+					SizeHeight	"0"
+					SizeWidth	"640"
+					ZOrder	"0"
+				}
+				WindowPrompt	"17"				
+				{
+					Alignment	"left"
+					Appearance	"3D Highlight"
+					BackColor	"System - Button Face"
+					Border	"true"
+					Font	"System (generic)"
+					FontBold	"false"
+					FontColor	"System - Button Text"
+					FontItalic	"false"
+					FontUnderline	"false"
+					Pattern	"(none)"
+					PatternColor	"White"
+					PositionLeft	"8"
+					PositionTop	"34"
+					ReadingOrder	"LeftToRight"
+					ResizeHoriz	"StayLeft"
+					ResizeVert	"StayTop"
+					SizeHeight	"20"
+					SizeWidth	"112"
+					Text	"Item Number"
+					Visible	"true"
+					ZOrder	"10"
+					Zoom	"false"
+				}
+				WindowPrompt	"18"				
+				{
+					Alignment	"left"
+					Appearance	"3D Highlight"
+					BackColor	"System - Button Face"
+					Border	"true"
+					Font	"System (generic)"
+					FontBold	"false"
+					FontColor	"System - Button Text"
+					FontItalic	"false"
+					FontUnderline	"false"
+					Pattern	"(none)"
+					PatternColor	"White"
+					PositionLeft	"344"
+					PositionTop	"34"
+					ReadingOrder	"LeftToRight"
+					ResizeHoriz	"StayLeft"
+					ResizeVert	"StayTop"
+					SizeHeight	"20"
+					SizeWidth	"112"
+					Text	"Date Sent"
+					Visible	"true"
+					ZOrder	"11"
+					Zoom	"false"
+				}
+				WindowPrompt	"19"				
+				{
+					Alignment	"left"
+					Appearance	"3D Highlight"
+					BackColor	"System - Button Face"
+					Border	"true"
+					Font	"System (generic)"
+					FontBold	"false"
+					FontColor	"System - Button Text"
+					FontItalic	"false"
+					FontUnderline	"false"
+					Pattern	"(none)"
+					PatternColor	"White"
+					PositionLeft	"344"
+					PositionTop	"53"
+					ReadingOrder	"LeftToRight"
+					ResizeHoriz	"StayLeft"
+					ResizeVert	"StayTop"
+					SizeHeight	"20"
+					SizeWidth	"112"
+					Text	"Time Sent"
+					Visible	"true"
+					ZOrder	"12"
+					Zoom	"false"
+				}
+				WindowPrompt	"20"				
+				{
+					Alignment	"left"
+					Appearance	"3D Highlight"
+					BackColor	"System - Button Face"
+					Border	"true"
+					Font	"System (generic)"
+					FontBold	"false"
+					FontColor	"System - Button Text"
+					FontItalic	"false"
+					FontUnderline	"false"
+					Pattern	"(none)"
+					PatternColor	"White"
+					PositionLeft	"8"
+					PositionTop	"72"
+					ReadingOrder	"LeftToRight"
+					ResizeHoriz	"StayLeft"
+					ResizeVert	"StayTop"
+					SizeHeight	"20"
+					SizeWidth	"112"
+					Text	"Requested By"
+					Visible	"true"
+					ZOrder	"13"
+					Zoom	"false"
+				}
+				WindowPrompt	"21"				
+				{
+					Alignment	"left"
+					Appearance	"3D Highlight"
+					BackColor	"System - Button Face"
+					Border	"true"
+					Font	"System (generic)"
+					FontBold	"false"
+					FontColor	"System - Button Text"
+					FontItalic	"false"
+					FontUnderline	"false"
+					Pattern	"(none)"
+					PatternColor	"White"
+					PositionLeft	"8"
+					PositionTop	"91"
+					ReadingOrder	"LeftToRight"
+					ResizeHoriz	"StayLeft"
+					ResizeVert	"StayTop"
+					SizeHeight	"20"
+					SizeWidth	"112"
+					Text	"Error Message Text"
+					Visible	"true"
+					ZOrder	"14"
+					Zoom	"false"
+				}
+				WindowLine	"23"				
+				{
+					Appearance	"3D Border"
+					LineColor	"System"
+					LineSize	"1"
+					PositionLeft	"218"
+					PositionTop	"3"
+					ResizeHoriz	"StayLeft"
+					ResizeVert	"StayTop"
+					SizeHeight	"16"
+					SizeWidth	"0"
+					ZOrder	"16"
+				}
+				WindowLine	"5"				
+				{
+					Appearance	"3D Border"
+					LineColor	"System"
+					LineSize	"1"
+					PositionLeft	"144"
+					PositionTop	"3"
+					ResizeHoriz	"StayLeft"
+					ResizeVert	"StayTop"
+					SizeHeight	"16"
+					SizeWidth	"0"
+					ZOrder	"2"
+				}
+				WindowPrompt	"6"				
+				{
+					Alignment	"left"
+					Appearance	"3D Highlight"
+					BackColor	"System - Button Face"
+					Border	"true"
+					Font	"System (generic)"
+					FontBold	"false"
+					FontColor	"System - Button Text"
+					FontItalic	"false"
+					FontUnderline	"false"
+					Pattern	"(none)"
+					PatternColor	"White"
+					PositionLeft	"8"
+					PositionTop	"53"
+					ReadingOrder	"LeftToRight"
+					ResizeHoriz	"StayLeft"
+					ResizeVert	"StayTop"
+					SizeHeight	"20"
+					SizeWidth	"112"
+					Text	"Integration Status"
+					Visible	"true"
+					ZOrder	"3"
+					Zoom	"false"
+				}
+				WindowControl	"Cancel Button"				
+				{
+					Alignment	"center"
+					Appearance	"3D Highlight"
+					BackColor	"System - Toolbar"
+					Border	"true"
+					ButtonStyle	"TextOnRight"
+					Cancel	"false"
+					ControlType	"PushButton"
+					Default	"false"
+					Editable	"true"
+					EndTransaction	"false"
+					EventChange	"BSP_IV_Item_Maintenance_Integration Cancel Button_CHG"
+					EventContextMenu	""
+					EventMouseEnter	""
+					EventMouseExit	""
+					EventOther	""
+					EventPost	""
+					EventPre	""
+					Field	"Cancel Button"
+					Font	"System (generic)"
+					FontBold	"false"
+					FontColor	"System - Button Text"
+					FontItalic	"false"
+					FontUnderline	"false"
+					HyperSpace	"false"
+					LinkedLookup	"0"
+					LinkedPrompt	"0"
+					Pattern	"(none)"
+					PatternColor	"White"
+					PositionLeft	"146"
+					PositionTop	"0"
+					ResizeHoriz	"StayLeft"
+					ResizeVert	"StayTop"
+					SizeHeight	"24"
+					SizeWidth	"72"
+					TabStop	"true"
+					Tag	"11"
+					Tooltip	""
+					UseUniqueHelp	"true"
+					Visible	"true"
+					ZOrder	"4"
+					Zoom	"false"
+				}
+				WindowControl	"Date Sent"				
+				{
+					Appearance	"2D Border"
+					AutoCopy	"true"
+					BackColor	"System - Window Background"
+					Border	"true"
+					ControlType	"Date"
+					DisableLookup	"false"
+					Editable	"false"
+					EventChange	""
+					EventContextMenu	""
+					EventMouseEnter	""
+					EventMouseExit	""
+					EventOther	""
+					EventPost	""
+					EventPre	""
+					Field	"Date Sent"
+					Font	"System (generic)"
+					FontBold	"false"
+					FontColor	"System - Window Text"
+					FontItalic	"false"
+					FontUnderline	"false"
+					LinkedFormat	"0"
+					LinkedLookup	"0"
+					LinkedPrompt	"0"
+					Pattern	"(none)"
+					PatternColor	"White"
+					PositionLeft	"456"
+					PositionTop	"34"
+					ReadingOrder	"LeftToRight"
+					Required	"false"
+					ResizeHoriz	"StayLeft"
+					ResizeVert	"StayTop"
+					SavedOnRestart	"false"
+					SetChangeFlag	"true"
+					SizeHeight	"20"
+					SizeWidth	"128"
+					TabStop	"true"
+					Tag	"13"
+					Tooltip	""
+					UseUniqueHelp	"true"
+					Visible	"true"
+					ZOrder	"6"
+					Zoom	"false"
+				}
+				WindowControl	"Display Existing Record"				
+				{
+					Alignment	"left"
+					Appearance	"3D Border"
+					AutoCopy	"true"
+					BackColor	"Yellow"
+					Border	"true"
+					ButtonStyle	"Standard"
+					ControlType	"CheckBox"
+					Editable	"true"
+					EventChange	"BSP_IV_Item_Maintenance_Integration Display Existing Record_CHG"
+					EventContextMenu	""
+					EventMouseEnter	""
+					EventMouseExit	""
+					EventOther	""
+					EventPost	""
+					EventPre	""
+					Field	"Display Existing Record"
+					Font	"System (generic)"
+					FontBold	"false"
+					FontColor	"System - Window Text"
+					FontItalic	"false"
+					FontUnderline	"false"
+					HyperSpace	"false"
+					LinkedLookup	"0"
+					LinkedPrompt	"0"
+					Pattern	"(none)"
+					PatternColor	"White"
+					PatternSelect	"50% Shading"
+					PositionLeft	"24"
+					PositionTop	"167"
+					Required	"false"
+					ResizeHoriz	"StayLeft"
+					ResizeVert	"StayTop"
+					SavedOnRestart	"false"
+					SetChangeFlag	"true"
+					SizeHeight	"20"
+					SizeWidth	"144"
+					TabStop	"true"
+					Tag	"22"
+					Tooltip	""
+					UseUniqueHelp	"true"
+					Visible	"false"
+					ZOrder	"15"
+				}
+				WindowControl	"Error Message Text"				
+				{
+					Alignment	"left"
+					Appearance	"2D Border"
+					AutoComplete	"false"
+					AutoCopy	"true"
+					BackColor	"System - Window Background"
+					Border	"true"
+					ControlType	"String"
+					DisableLookup	"false"
+					Editable	"false"
+					EventChange	""
+					EventContextMenu	""
+					EventMouseEnter	""
+					EventMouseExit	""
+					EventOther	""
+					EventPost	""
+					EventPre	""
+					Field	"Error Message Text"
+					Font	"System (generic)"
+					FontBold	"false"
+					FontColor	"System - Window Text"
+					FontItalic	"false"
+					FontUnderline	"false"
+					LinkedFormat	"0"
+					LinkedLookup	"0"
+					LinkedPrompt	"0"
+					Password	"false"
+					Pattern	"(none)"
+					PatternColor	"White"
+					PositionLeft	"120"
+					PositionTop	"91"
+					ReadingOrder	"LeftToRight"
+					Required	"false"
+					ResizeHoriz	"StayLeft"
+					ResizeVert	"StayTop"
+					SavedOnRestart	"false"
+					SetChangeFlag	"true"
+					SizeHeight	"20"
+					SizeWidth	"464"
+					TabStop	"true"
+					Tag	"16"
+					Tooltip	""
+					UseUniqueHelp	"true"
+					Visible	"true"
+					ZOrder	"9"
+					Zoom	"false"
+				}
+				WindowControl	"Item Number"				
+				{
+					Alignment	"left"
+					Appearance	"2D Border"
+					AutoComplete	"false"
+					AutoCopy	"true"
+					BackColor	"System - Window Background"
+					Border	"true"
+					ControlType	"String"
+					DisableLookup	"false"
+					Editable	"false"
+					EventChange	""
+					EventContextMenu	""
+					EventMouseEnter	""
+					EventMouseExit	""
+					EventOther	""
+					EventPost	""
+					EventPre	""
+					Field	"Item Number"
+					Font	"System (generic)"
+					FontBold	"false"
+					FontColor	"System - Window Text"
+					FontItalic	"false"
+					FontUnderline	"false"
+					LinkedFormat	"0"
+					LinkedLookup	"0"
+					LinkedPrompt	"0"
+					Password	"false"
+					Pattern	"(none)"
+					PatternColor	"White"
+					PositionLeft	"120"
+					PositionTop	"34"
+					ReadingOrder	"LeftToRight"
+					Required	"false"
+					ResizeHoriz	"StayLeft"
+					ResizeVert	"StayTop"
+					SavedOnRestart	"false"
+					SetChangeFlag	"true"
+					SizeHeight	"20"
+					SizeWidth	"128"
+					TabStop	"true"
+					Tag	"12"
+					Tooltip	""
+					UseUniqueHelp	"true"
+					Visible	"true"
+					ZOrder	"5"
+					Zoom	"false"
+				}
+				WindowControl	"Requested By"				
+				{
+					Alignment	"left"
+					Appearance	"2D Border"
+					AutoComplete	"false"
+					AutoCopy	"true"
+					BackColor	"System - Window Background"
+					Border	"true"
+					ControlType	"String"
+					DisableLookup	"false"
+					Editable	"false"
+					EventChange	""
+					EventContextMenu	""
+					EventMouseEnter	""
+					EventMouseExit	""
+					EventOther	""
+					EventPost	""
+					EventPre	""
+					Field	"Requested By"
+					Font	"System (generic)"
+					FontBold	"false"
+					FontColor	"System - Window Text"
+					FontItalic	"false"
+					FontUnderline	"false"
+					LinkedFormat	"0"
+					LinkedLookup	"0"
+					LinkedPrompt	"0"
+					Password	"false"
+					Pattern	"(none)"
+					PatternColor	"White"
+					PositionLeft	"120"
+					PositionTop	"72"
+					ReadingOrder	"LeftToRight"
+					Required	"false"
+					ResizeHoriz	"StayLeft"
+					ResizeVert	"StayTop"
+					SavedOnRestart	"false"
+					SetChangeFlag	"true"
+					SizeHeight	"20"
+					SizeWidth	"128"
+					TabStop	"true"
+					Tag	"15"
+					Tooltip	""
+					UseUniqueHelp	"true"
+					Visible	"true"
+					ZOrder	"8"
+					Zoom	"false"
+				}
+				WindowControl	"Status Code"				
+				{
+					Alignment	"left"
+					Appearance	"2D Border"
+					AutoComplete	"false"
+					AutoCopy	"true"
+					BackColor	"System - Window Background"
+					Border	"true"
+					ControlType	"String"
+					DisableLookup	"false"
+					Editable	"false"
+					EventChange	""
+					EventContextMenu	""
+					EventMouseEnter	""
+					EventMouseExit	""
+					EventOther	""
+					EventPost	""
+					EventPre	""
+					Field	"Status Code"
+					Font	"System (generic)"
+					FontBold	"false"
+					FontColor	"System - Window Text"
+					FontItalic	"false"
+					FontUnderline	"false"
+					LinkedFormat	"0"
+					LinkedLookup	"0"
+					LinkedPrompt	"0"
+					Password	"false"
+					Pattern	"(none)"
+					PatternColor	"White"
+					PositionLeft	"120"
+					PositionTop	"53"
+					ReadingOrder	"LeftToRight"
+					Required	"false"
+					ResizeHoriz	"StayLeft"
+					ResizeVert	"StayTop"
+					SavedOnRestart	"false"
+					SetChangeFlag	"true"
+					SizeHeight	"20"
+					SizeWidth	"128"
+					TabStop	"true"
+					Tag	"24"
+					Tooltip	""
+					UseUniqueHelp	"true"
+					Visible	"true"
+					ZOrder	"17"
+					Zoom	"false"
+				}
+				WindowControl	"Time Sent"				
+				{
+					Appearance	"2D Border"
+					AutoCopy	"true"
+					BackColor	"System - Window Background"
+					Border	"true"
+					ControlType	"Time"
+					DisableLookup	"false"
+					Editable	"false"
+					EventChange	""
+					EventContextMenu	""
+					EventMouseEnter	""
+					EventMouseExit	""
+					EventOther	""
+					EventPost	""
+					EventPre	""
+					Field	"Time Sent"
+					Font	"System (generic)"
+					FontBold	"false"
+					FontColor	"System - Window Text"
+					FontItalic	"false"
+					FontUnderline	"false"
+					LinkedFormat	"0"
+					LinkedLookup	"0"
+					LinkedPrompt	"0"
+					Pattern	"(none)"
+					PatternColor	"White"
+					PositionLeft	"456"
+					PositionTop	"53"
+					ReadingOrder	"LeftToRight"
+					Required	"false"
+					ResizeHoriz	"StayLeft"
+					ResizeVert	"StayTop"
+					SavedOnRestart	"false"
+					SetChangeFlag	"true"
+					SizeHeight	"20"
+					SizeWidth	"128"
+					TabStop	"true"
+					Tag	"14"
+					Tooltip	""
+					UseUniqueHelp	"true"
+					Visible	"true"
+					ZOrder	"7"
+					Zoom	"false"
+				}
+			}
+			LastTag	"38"
+			Position	"1"
+			PositionLeft	"1"
+			PositionTop	"1"
+			Resizable	"true"
+			SizeHeight	"121"
+			SizeWidth	"594"
+			WindowType	"Primary"
+		}
+	}
+	~EventScripts
+	{
+		EventScript	"BSP_IV_Item_Maintenance_Integration Cancel Button_CHG"		
+		{
+			Documentation	""
+			Script	"{run script '(L) ServiceSendToPowerhouse';}
+close form BSP_IV_Item_Maintenance_Integration;"
+			UserProperties	""
+		}
+		EventScript	"BSP_IV_Item_Maintenance_Integration Display Existing Record_CHG"		
+		{
+			Documentation	""
+			Script	"release table BSP_Powerhouse_Item_Transfer;
+range clear table BSP_Powerhouse_Item_Transfer;
+clear table BSP_Powerhouse_Item_Transfer;
+
+set 'Item Number' of table BSP_Powerhouse_Item_Transfer to 'Item Number';
+get table BSP_Powerhouse_Item_Transfer;
+if err() = OKAY then
+	copy from table BSP_Powerhouse_Item_Transfer to window BSP_IV_Item_Maintenance_Integration;
+	
+	set 'Display Existing Record' to true;
+end if;	"
+			UserProperties	""
+		}
+		EventScript	"BSP_IV_Item_Maintenance_Integration l_Send to Powerhouse_CHG"		
+		{
+			Documentation	""
+			Script	"local integer				nStatus;
+local 'Error Message Text' 	l_ErrorMessage;
+
+if ask(\"Are you sure you want to send this record to Powerhouse?\", \"Yes\", \"No\", \"\") = ASKBUTTON1 then
+	call SendToPowerhouse of form BSP_IV_Item_Maintenance_Integration, 'Item Number', nStatus, l_ErrorMessage;
+	
+	if nStatus = OKAY then
+		warning \"Record has been successfully sent to Powerhouse.\";
+	else
+		warning \"There was an error processing your request. \" + l_ErrorMessage;
+		abort script;
+	end if;
+	
+	run script 'Display Existing Record';
+end if;
+
+
+"
+			UserProperties	""
+		}
+		EventScript	"BSP_IV_Item_Maintenance_Integration l_ServiceSendToPowerhouse_CHG"		
+		{
+			Documentation	""
+			Script	"local long SQL_connection, status;
+
+local integer				nStatus;
+local 'Error Message Text' 	l_ErrorMessage;
+
+{Query information}
+local string itemNumber;
+local text SQL_Statements;
+
+local integer ctr, deleteCtr;
+local string Items[100];
+
+{SQL error information}
+local long GPS_error_number, SQL_error_number;
+local string SQL_error_string, ODBC_error_string;
+
+
+{Connect to the SQL data source.}
+status = SQL_Connect(SQL_connection);
+if status = 0 then
+	{Build SQL statement to use the appropriate database.}
+	SQL_Statements = \"use \" + 'Intercompany ID' of globals;
+	{Execute the SQL statements.}
+	status = SQL_Execute(SQL_connection, SQL_Statements);
+	if status = 0 then
+		{Build the SQL statements}
+		SQL_Statements = \"SELECT TOP 100 INDEX1 FROM eConnect_Out WHERE DOCTYPE = 'BSP_Item'\";
+		{Execute the SQL statements.}
+		status = SQL_Execute(SQL_connection, SQL_Statements);
+		if status = 0 then
+			status = SQL_FetchNext(SQL_connection);
+			while status = 0 do
+				status = SQL_GetData(SQL_connection, 1, itemNumber);
+				
+				ctr = ctr + 1;
+				
+				Items[ctr] = itemNumber;
+				call SendToPowerhouse of form BSP_IV_Item_Maintenance_Integration, itemNumber, nStatus, l_ErrorMessage;
+				
+				status = SQL_FetchNext(SQL_connection);
+			end while;
+			
+			SQL_Clear(SQL_connection);
+			
+			{Finished processing the results}
+			for deleteCtr = 1 to 100 do
+				if Items[deleteCtr] <> \"\" then
+					SQL_Statements = \"SET NOCOUNT ON; DELETE FROM eConnect_Out WHERE DOCTYPE = 'BSP_Item' AND INDEX1 = '\" + Items[deleteCtr] + \"'\";
+					status = SQL_Execute(SQL_connection, SQL_Statements);
+				else
+					exit for;
+				end if;
+			end for;
+		end if;
+	end if;
+	{Disconnect from the SQL data source.}
+	status = SQL_Terminate(SQL_connection);
+end if;"
+			UserProperties	""
+		}
+		EventScript	"BSP_IV_Item_Maintenance_Integration_WIN_PRE"		
+		{
+			Documentation	""
+			Script	"run script 'Display Existing Record';"
+			UserProperties	""
+		}
+	}
+	~Functions
+	{
+	}
+	~Procedures
+	{
+		Procedure	"SendToPowerhouse"		
+		{
+			Documentation	""
+			Script	"in 'Item Number'  			in_ItemNumber;
+out integer					out_Result;
+out 'Error Message Text' 	out_ErrorMessageText;"
+			UserProperties	""
+		}
+	}
+}

@@ -1,0 +1,21 @@
+Function	"get_field_list"
+{
+	Core	"System"
+	Documentation	""
+	Script	"function returns text field_list;
+inout LISTBOX lb;
+ 
+local integer i;
+ 
+
+{field list will be a,b,c, with trailing , value}
+for i = 1 to countitems(lb) do
+ if i = countitems(lb) then
+  field_list =field_list + itemname(lb,i);
+ else
+  field_list =field_list + itemname(lb,i) + \",\";
+ end if;
+end for;
+"
+	UserProperties	""
+}

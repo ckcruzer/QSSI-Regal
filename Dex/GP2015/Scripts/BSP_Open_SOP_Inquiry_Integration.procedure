@@ -1,0 +1,34 @@
+Procedure	"BSP_Open_SOP_Inquiry_Integration"
+{
+	Core	"Sales"
+	Documentation	""
+	Script	"{Only Orders are allowed}
+if 'SOP Type' of window SOP_Inquiry of form SOP_Inquiry <> SOP_ORDER then
+	warning \"This feature is only for documents with type Order.\";
+	abort script;
+end if;
+
+{Retrieve Settings}
+release table BSP_Integration_SETP;
+range clear table BSP_Integration_SETP;
+clear table BSP_Integration_SETP;
+
+set 'Company ID' of table BSP_Integration_SETP to 'Company ID' of globals;
+if err() <> OKAY then
+	warning \"Dynamics GP Integration setting is missing!\";
+	abort script;
+end if;
+
+open form BSP_SOP_Entry_Integration;
+set 'SOP Number' of window BSP_SOP_Entry_Integration of form BSP_SOP_Entry_Integration to 'SOP Number' of window SOP_Inquiry of form SOP_Inquiry;
+set 'SOP Type' of window BSP_SOP_Entry_Integration of form BSP_SOP_Entry_Integration to 'SOP Type' of window SOP_Inquiry of form SOP_Inquiry;
+disable field '(L) Send to Powerhouse' of window BSP_SOP_Entry_Integration of form BSP_SOP_Entry_Integration;			
+run script 'Display Existing Record' of window BSP_SOP_Entry_Integration of form BSP_SOP_Entry_Integration;	
+"
+	ServiceAction	""
+	ServiceCustomAciton	""
+	ServiceEnabled	"FALSE"
+	ServiceRawRequest	"FALSE"
+	ServiceUriTemplate	""
+	UserProperties	""
+}

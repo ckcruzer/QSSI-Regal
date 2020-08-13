@@ -1,0 +1,12 @@
+Procedure	"BSP_CloseCommandForm"
+{
+	Core	"System"
+	Documentation	""
+	Script	"close form Command_BSP;"
+	ServiceAction	""
+	ServiceCustomAciton	""
+	ServiceEnabled	"FALSE"
+	ServiceRawRequest	"FALSE"
+	ServiceUriTemplate	""
+	UserProperties	""
+}

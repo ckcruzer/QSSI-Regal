@@ -1,0 +1,65 @@
+Procedure	"BSP_Service_Process_Item_Integration"
+{
+	Core	"Sales"
+	Documentation	""
+	Script	"local	long			nStatus;
+local 	TraceState		Trace;
+{ Initialize }
+nStatus = OKAY;
+nStatus = Create(Trace) of form Trace;
+
+call Trace of form Trace, Trace, OKAY, technicalname(script BSP_Service_Process_SOP_Integration, QUALIFY_FULL), getmsg(12667);
+
+try
+
+	{Retrieve Settings}
+	release table BSP_Integration_SETP;
+	range clear table BSP_Integration_SETP;
+	clear table BSP_Integration_SETP;
+	
+	set 'Company ID' of table BSP_Integration_SETP to 'Company ID' of globals;
+	get table BSP_Integration_SETP;
+	if err() <> OKAY then
+		call Trace of form Trace, Trace, TRACE_FAILURE,technicalname(script BSP_Service_Process_SOP_Integration,QUALIFY_FULL),getmsg(12693),ERROR_TYPE_BAD_REQUEST; 
+		throw 22001, 22001, \"Missing PH Integration Settings\";
+	else
+		if BSP_EnableIVItemAutoSync of table BSP_Integration_SETP = false then
+			throw TRACE_FAILURE;	
+		end if;
+	end if;
+
+	open form BSP_IV_Item_Maintenance_Integration;
+	if not isopen(form BSP_IV_Item_Maintenance_Integration) then
+		call Trace of form Trace, Trace, TRACE_FAILURE,technicalname(script BSP_Service_Process_Item_Integration,QUALIFY_FULL),getmsg(12693),ERROR_TYPE_BAD_REQUEST;  {Form failed to open.}
+		throw OPEN_WINDOW_FAILED;	
+	end if;
+	
+	nStatus = AssignTraceReference(Trace);
+	assert nStatus = OKAY;
+		
+	run script '(L) ServiceSendToPowerhouse' of window BSP_IV_Item_Maintenance_Integration of form BSP_IV_Item_Maintenance_Integration;
+	if GetTraceError(Trace) of form Trace = TRACE_FAILURE then
+		throw TRACE_FAILURE;	
+	else
+		close form BSP_SOP_Entry_Integration;
+	end if;
+
+	
+catch [OPEN_WINDOW_FAILED, INVALID]
+	{ no cleanup so just return errors }
+	
+catch [TRACE_FAILURE]
+	close form BSP_SOP_Entry_Integration;
+else
+	{call Trace of form Trace, Trace, TRACE_FAILURE, technicalname(script BSP_Service_Process_SOP_Integration, QUALIFY_FULL), substring(Exception_Message(), 1, 255);}	
+	close form BSP_SOP_Entry_Integration;	
+end try;
+
+{call Trace of form Trace, Trace, OKAY, technicalname(script BSP_Service_Process_SOP_Integration, QUALIFY_FULL), getmsg(12668);}"
+	ServiceAction	"Create"
+	ServiceCustomAciton	""
+	ServiceEnabled	"TRUE"
+	ServiceRawRequest	"TRUE"
+	ServiceUriTemplate	"Inventory/PHItemIntegration"
+	UserProperties	""
+}
