@@ -1,0 +1,301 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{04DDA867-8D0D-480C-941F-1CE51C89D000}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BSP.DynamicsGP.PowerHouse</RootNamespace>
+    <AssemblyName>BSP.DynamicsGP.PowerHouse</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\..\Program Files %28x86%29\Microsoft Dynamics\GP2015\AddIns\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\..\..\..\..\..\Program Files %28x86%29\Microsoft Dynamics\GP2016\AddIns\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Application.BusinessSolutionPartners, Version=14.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Program Files (x86)\Microsoft Dynamics\GP2015 VS Tools SDK\Application.BusinessSolutionPartners.dll</HintPath>
+    </Reference>
+    <Reference Include="Application.Dynamics">
+      <HintPath>..\..\..\..\Program Files (x86)\Microsoft Dynamics\GP2015 VS Tools SDK\Application.Dynamics.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Dexterity.Bridge">
+      <HintPath>..\..\..\..\Program Files (x86)\Microsoft Dynamics\GP2015 VS Tools SDK\Microsoft.Dexterity.Bridge.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Constants.cs" />
+    <Compile Include="DataAccessHelper.cs" />
+    <Compile Include="Extensions\DoubleExtension.cs" />
+    <Compile Include="Extensions\StringExtension.cs" />
+    <Compile Include="GpAddIn.cs" />
+    <Compile Include="Models\Address.cs" />
+    <Compile Include="Models\BoxSizeItemMaster.cs" />
+    <Compile Include="Models\BoxSizeMaster.cs" />
+    <Compile Include="Models\BspItemMaster.cs" />
+    <Compile Include="Models\Customer.cs" />
+    <Compile Include="Models\CustomerItemXref.cs" />
+    <Compile Include="Models\ItemMaster.cs" />
+    <Compile Include="Models\PowerhouseWsSetting.cs" />
+    <Compile Include="Models\ReceiptTransferLineDetails.cs" />
+    <Compile Include="Models\ReceiptTransferLine.cs" />
+    <Compile Include="Models\ReceiptTransfer.cs" />
+    <Compile Include="Models\PurchaseOrder.cs" />
+    <Compile Include="Models\PurchaseOrderLine.cs" />
+    <Compile Include="Models\CommentMaster.cs" />
+    <Compile Include="Models\RecordNotesMaster.cs" />
+    <Compile Include="Models\SalesOrderLineTransferRequest.cs" />
+    <Compile Include="Models\SalesOrderTransferRequest.cs" />
+    <Compile Include="Models\SalesSerialLot.cs" />
+    <Compile Include="Models\SalesTransaction.cs" />
+    <Compile Include="Models\SalesTransactionLine.cs" />
+    <Compile Include="Models\SalesTransactionLineComment.cs" />
+    <Compile Include="Models\SalesTransactionLineSpInstructions.cs" />
+    <Compile Include="Models\SalesTransactionSpInstructions.cs" />
+    <Compile Include="Models\SalesUserDefined.cs" />
+    <Compile Include="Models\ShippingMethod.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Models\SalesOrderStatus.cs" />
+    <Compile Include="Web References\PowerhouseWS\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="Web References\PowerhouseWS\ASNResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\PowerhouseWS\CloseReceipt.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\PowerhouseWS\ContentResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\PowerhouseWS\CustomerResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\PowerhouseWS\IfShipOrdResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\PowerhouseWS\InventoryAdjustment.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\PowerhouseWS\InventoryBalance.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\PowerhouseWS\InventoryBalSimple.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\PowerhouseWS\ItemBomResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\PowerhouseWS\ItemConfigResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\PowerhouseWS\ItemConfigUp.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\PowerhouseWS\ItemMasterResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\PowerhouseWS\ItemMasterUp.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\PowerhouseWS\ItemStateProdCodeResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\PowerhouseWS\ItemUpcResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\PowerhouseWS\KitRunResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\PowerhouseWS\KitRunUp.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\PowerhouseWS\Order.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\PowerhouseWS\OrderLineCancel.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\PowerhouseWS\OrderResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\PowerhouseWS\OrderStatus.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\PowerhouseWS\PHWebServices.wsdl" />
+    <None Include="Web References\PowerhouseWS\ReceiptResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\PowerhouseWS\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\PowerhouseWS\Shipment.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\PowerhouseWS\TruckShipment.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Toolbar_Print.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Toolbar_Copy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Toolbar_New.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Window_NotePresent.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Toolbar_Void.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Toolbar_Redisplay.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Toolbar_Post.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Toolbar_Open.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Toolbar_DeleteAll.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Toolbar_Clear.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Field_NotePresent.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Field_NoteAbsent.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Field_Lookup.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Field_Expansion.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Field_Edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Field_Delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Field_MapPoint.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Window_NoteAbsent.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\VCR_Previous.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\VCR_Next.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\VCR_Last.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\VCR_First.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Toolbar_Save.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Toolbar_Delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Toolbar_Cancel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\HelpImage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferenceUrl Include="http://18.224.66.250:8083/PHWebServices/services/PHWebServices%3fwsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\PowerhouseWS\</RelPath>
+      <UpdateFromURL>http://18.224.66.250:8083/PHWebServices/services/PHWebServices%3fwsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>BSP_DynamicsGP_PowerHouse_PowerhouseWS_PHWebServices</CachedSettingsPropName>
+    </WebReferenceUrl>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
