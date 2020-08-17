@@ -23,10 +23,10 @@ namespace BSP.PowerHouse.DynamicsGP.Integration
                 _powerhouseWsSetting = DynamicsGpDB.GetPowerhouseIntegrationSettings();
                 _services = new List<IPowerHouseGPService>
             {
-                //new PowerHouseGPWebOrderService(_powerhouseWsSetting),
-                //new PowerHouseGPShipmentService(_powerhouseWsSetting),
-                //new PowerHouseGPItemService(_powerhouseWsSetting)
-                new PowerHouseGPInventoryAdjustmentService(_powerhouseWsSetting)
+                new PowerHouseGPWebOrderService(_powerhouseWsSetting),
+                new PowerHouseGPShipmentService(_powerhouseWsSetting),
+                new PowerHouseGPItemService(_powerhouseWsSetting),
+                //new PowerHouseGPInventoryAdjustmentService(_powerhouseWsSetting)
             };
                 //set timer
                 //_timer = new Timer(_powerhouseWsSetting.BSPFrequency * 60000) { AutoReset = false };

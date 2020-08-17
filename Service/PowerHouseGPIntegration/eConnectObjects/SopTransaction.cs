@@ -196,7 +196,8 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.eConnectObjects
                             SOPNUMBE = detail.orderId,
                             CUSTNMBR = _shipment.custCode,
                             DOCDATE = ((DateTime)_shipment.dateOrdered).ToShortDateString(),
-                            LOCNCODE = detail.olCust2,
+                            //LOCNCODE = detail.olCust2,
+                            LOCNCODE = sopLineItem.LOCNCODE, // Just use the same as the one from the original order
                             ITEMNMBR = detail.itemId,
                             UNITPRCE = Convert.ToDecimal(detail.olCust1),
                             QUANTITY = sopLineItem.QUANTITY,
@@ -300,7 +301,8 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.eConnectObjects
                                 SOPNUMBE = detail.orderId,
                                 LNITMSEQ = lnitmseq,
                                 CMPNTSEQ = cmpntseq,
-                                LOCNCODE = detail.olCust2,
+                                //LOCNCODE = detail.olCust2,
+                                LOCNCODE = componentItem.LOCNCODE, // Just use the same as the one from the original order
                                 ITEMNMBR = detail.itemId,
                                 QUANTITY = componentItem.QUANTITY,
                                 QTYTBAOR = componentItem.QTYTBAOR,

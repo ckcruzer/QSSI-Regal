@@ -1,0 +1,2 @@
+﻿1.0.0.5
+	- Fixed the SOP Item and Component Item location code issue.
