@@ -36,6 +36,8 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Model
         public string BSPRcvInTransferSite { get; set; }
 
         public string BSPRcvInTransferToSite { get; set; }
+        public string BSPInvTransferBatchID { get; set; }
+        public string BSPInvTrxBatchID { get; set; }
 
     }
 }

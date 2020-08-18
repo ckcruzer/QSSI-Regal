@@ -35,6 +35,18 @@ Table	"BSP_Integration_SETP"
 			Field	"BSP_GPWS_URL"
 			Position	"9"
 		}
+		TableField	"BSP_InvTransferBatchID"		
+		{
+			Encrypt	"false"
+			Field	"BSP_InvTransferBatchID"
+			Position	"19"
+		}
+		TableField	"BSP_InvTrxBatchID"		
+		{
+			Encrypt	"false"
+			Field	"BSP_InvTrxBatchID"
+			Position	"20"
+		}
 		TableField	"BSP_PHContainerReceivingType"		
 		{
 			Encrypt	"false"

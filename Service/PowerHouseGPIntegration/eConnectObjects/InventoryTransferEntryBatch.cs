@@ -20,7 +20,7 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.eConnectObjects
             if (_powerhouseWsSetting != null)
             {
                 DateTimeFormatInfo dfi = DateTimeFormatInfo.CurrentInfo;
-                string batchNumber = !string.IsNullOrWhiteSpace(_powerhouseWsSetting.BSPRecvTrxBatchID) ? _powerhouseWsSetting.BSPRecvTrxBatchID : "PHIX";
+                string batchNumber = !string.IsNullOrWhiteSpace(_powerhouseWsSetting.BSPInvTransferBatchID) ? _powerhouseWsSetting.BSPInvTransferBatchID : "PHIX";
                 if (!string.IsNullOrWhiteSpace(batchNumber) && _powerhouseWsSetting.BSPBatchFrequency != Domain.BatchFrequency.Once)
                 {
                     batchNumber += "-";

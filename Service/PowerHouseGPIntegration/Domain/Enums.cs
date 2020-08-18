@@ -3,11 +3,11 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Domain
 {
     public enum BatchFrequency : int
     {
-        Once = 0,
-        Hourly = 1,
-        Daily = 2,
-        Weekly = 3,
-        Monthly = 4
+        Once = 1,
+        Hourly = 2,
+        Daily = 3,
+        Weekly = 4,
+        Monthly = 5
     }
     public enum QuantityShortageOption : int
     {

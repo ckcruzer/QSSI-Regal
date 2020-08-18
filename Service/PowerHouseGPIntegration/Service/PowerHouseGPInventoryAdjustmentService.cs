@@ -42,28 +42,70 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Service
                     {
                         // Testing
                         //var test = inventoryAdjustments.Where(t => t.ifTranCode.Equals("POST-INC", StringComparison.OrdinalIgnoreCase)).ToList();
-
-                        //process receivings
-                        var poReceivingTrxs = inventoryAdjustments.Where(t => t.ifTranCode.Equals("POST-INC", StringComparison.OrdinalIgnoreCase) && t.receiptType != null && t.receiptType.Equals(_powerhouseWsSetting.BSPPHPOReceivingType)).ToList();
-                        if (poReceivingTrxs.Count > 0)
-                        {
-                            ProcessReceivingTransactions(serviceProxy, sessionId, poReceivingTrxs);
-                            
-                        }
-
                         string transferBatch;
 
-                        var containerReceivingTrxs = inventoryAdjustments.Where(t => t.ifTranCode.Equals("POST-INC", StringComparison.OrdinalIgnoreCase) && t.receiptType != null && t.receiptType.Equals(_powerhouseWsSetting.BSPPHContReceivingType)).ToList();
-
-                        if (containerReceivingTrxs.Count > 0)
+                        //process receivings
+                        var receivingTrxs = inventoryAdjustments.Where(t => t.ifTranCode.Equals("POST-INC", StringComparison.OrdinalIgnoreCase)).ToList();                        
+                        if (receivingTrxs.Count > 0)
                         {
-                            transferBatch = CreateBatch(new InventoryTransferEntryBatch(_powerhouseWsSetting));
-
-                            foreach (var containerReceivingTrx in containerReceivingTrxs)
+                            var poReceivingTrxs = inventoryAdjustments.Where(t => t.receiptType != null && t.receiptType.Equals(_powerhouseWsSetting.BSPPHPOReceivingType)).ToList();
+                            if (poReceivingTrxs.Count > 0)
                             {
-                                ProcessInventoryTransaction(serviceProxy, sessionId, new IVInventoryTransfer(transferBatch, containerReceivingTrx, _powerhouseWsSetting), containerReceivingTrx);
+                                ProcessReceivingTransactions(serviceProxy, sessionId, poReceivingTrxs);
+                            }
+
+                            var containerReceivingTrxs = inventoryAdjustments.Where(t => t.receiptType != null && t.receiptType.Equals(_powerhouseWsSetting.BSPPHContReceivingType)).ToList();
+                            if (containerReceivingTrxs.Count > 0)
+                            {
+                                transferBatch = CreateBatch(new InventoryTransferEntryBatch(_powerhouseWsSetting));
+
+                                foreach (var containerReceivingTrx in containerReceivingTrxs)
+                                {
+                                    ProcessInventoryTransaction(serviceProxy, sessionId, new IVInventoryTransfer(transferBatch, containerReceivingTrx, _powerhouseWsSetting), containerReceivingTrx, GPIvTrxType.Transfer);
+                                }
+                            }
+                        }                                                
+
+                        //process inventory adjustments
+                        var inventoryTrxs = inventoryAdjustments.Where(t => !t.ifTranCode.Equals("POST-INC", StringComparison.OrdinalIgnoreCase))
+                            .OrderBy(t => t.activityDate)
+                            .ThenBy(t => t.activityTime)
+                            .ThenBy(t => t.ifSeqNum)
+                            .ToList();
+
+                        string trxBatch = string.Empty;
+                        transferBatch = string.Empty;
+
+                        if (inventoryTrxs.Count > 0)
+                        {
+                            trxBatch = CreateBatch(new InventoryTrxEntryBatch(_powerhouseWsSetting));
+                            transferBatch = CreateBatch(new InventoryTransferEntryBatch(_powerhouseWsSetting));
+                        }
+
+                        foreach (var ivTran in inventoryTrxs)
+                        {
+                            switch (ivTran.ifTranCode)
+                            {
+                                case "BH-CONT":
+                                case "CHG-DEC":
+                                case "CY-DEC":
+                                case "DEC":
+                                case "DEC-AUTO":
+                                case "CHG-INC":
+                                case "CY-INC":
+                                case "INC":
+                                case "INC-AUTO":
+                                    //inventory adjustment
+                                    ProcessInventoryTransaction(serviceProxy, sessionId, new IVInventoryTransaction(trxBatch, ivTran, _powerhouseWsSetting), ivTran, GPIvTrxType.Adjustment);
+                                    break;
+                                case "HOLD-PLACE":
+                                case "HOLD-REL":                                   
+                                    break;
+                                default:
+                                    break;
                             }
                         }
+
                     }
                 }
             }
@@ -84,7 +126,7 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Service
             }
         }
 
-        private void ProcessInventoryTransaction(PHWebServicesPortTypeClient serviceProxy, string sessionId, IEConnectIVObject gpIVTransaction, InventoryAdjustment invTrx)
+        private void ProcessInventoryTransaction(PHWebServicesPortTypeClient serviceProxy, string sessionId, IEConnectIVObject gpIVTransaction, InventoryAdjustment invTrx, GPIvTrxType trxtype)
         {
             try
             {

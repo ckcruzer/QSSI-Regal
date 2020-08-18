@@ -12,15 +12,15 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.eConnectObjects
     {
         private readonly string _batchNumber;
         private readonly InventoryAdjustment _inventoryAdjustment;
-        private readonly DynamicsGpSettings _dynamicsGpSettings;
+        private readonly PowerhouseWsSetting _powerhouseWsSetting;
 
         public List<ItemSite> ItemSites { get; }
       
-        public IVInventoryTransaction(string batchNumber, InventoryAdjustment inventoryAdjustment, DynamicsGpSettings dynamicsGpSettings)
+        public IVInventoryTransaction(string batchNumber, InventoryAdjustment inventoryAdjustment, PowerhouseWsSetting powerhouseWsSetting)
         {
             _batchNumber = batchNumber;
             _inventoryAdjustment = inventoryAdjustment;
-            _dynamicsGpSettings = dynamicsGpSettings;
+            _powerhouseWsSetting = powerhouseWsSetting;
 
             ItemSites = new List<ItemSite>();
         }
@@ -36,7 +36,8 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.eConnectObjects
 
             inventoryTrx.taIVTransactionHeaderInsert = GetTrxHeader();
             inventoryTrx.taIVTransactionLineInsert_Items = GetTrxLines();
-            inventoryTrx.taIVTransactionLotInsert_Items = GetTrxLineLots();
+            if (!string.IsNullOrWhiteSpace(_inventoryAdjustment.lotId))
+                inventoryTrx.taIVTransactionLotInsert_Items = GetTrxLineLots();
 
             IVInventoryTransactionType[] ivInventoryTransactionType = { inventoryTrx };
 
@@ -53,9 +54,7 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.eConnectObjects
                     IVDOCTYP = (short)GPIvTrxType.Adjustment,
                     IVDOCNBR = _inventoryAdjustment.ifSeqNum.Value.ToString(),
                     ITEMNMBR = _inventoryAdjustment.itemId,
-                    LOCNCODE = string.IsNullOrWhiteSpace(_inventoryAdjustment.holdCodeFrom) 
-                    ? (_inventoryAdjustment.requester.Equals("OLD", StringComparison.OrdinalIgnoreCase) ? _dynamicsGpSettings.OldMaterialSiteId : _dynamicsGpSettings.MainSiteId)
-                    : (_inventoryAdjustment.requester.Equals("OLD", StringComparison.OrdinalIgnoreCase) ? _dynamicsGpSettings.OldMaterialHoldSiteId : _dynamicsGpSettings.MainHoldSiteId),
+                    LOCNCODE = _powerhouseWsSetting.BSPRcvInTransferToSite,
                     ADJTYPE = (short)(decimal.Parse(_inventoryAdjustment.signCode + _inventoryAdjustment.pieces.Value) > 0 ? GPIvAdjustmentType.Increase : GPIvAdjustmentType.Decrease),
                     SERLTQTY =  Convert.ToDecimal(_inventoryAdjustment.pieces.Value),
                     LOTNUMBR = _inventoryAdjustment.lotId,
@@ -70,11 +69,8 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.eConnectObjects
             {
                 IVDOCTYP = (short)GPIvTrxType.Adjustment,
                 IVDOCNBR = _inventoryAdjustment.ifSeqNum.Value.ToString(),
-                ITEMNMBR = _inventoryAdjustment.itemId,
-                //look for requester - NEW or OLD
-                TRXLOCTN = string.IsNullOrWhiteSpace(_inventoryAdjustment.holdCodeFrom)
-                ? (_inventoryAdjustment.requester.Equals("OLD", StringComparison.OrdinalIgnoreCase) ? _dynamicsGpSettings.OldMaterialSiteId : _dynamicsGpSettings.MainSiteId)
-                : (_inventoryAdjustment.requester.Equals("OLD", StringComparison.OrdinalIgnoreCase) ? _dynamicsGpSettings.OldMaterialHoldSiteId : _dynamicsGpSettings.MainHoldSiteId),
+                ITEMNMBR = _inventoryAdjustment.itemId,                
+                TRXLOCTN = _powerhouseWsSetting.BSPRcvInTransferToSite, 
                 TRXQTY = decimal.Parse(_inventoryAdjustment.signCode + _inventoryAdjustment.pieces.Value),
                 Reason_Code = _inventoryAdjustment.hostAdjCode
             };

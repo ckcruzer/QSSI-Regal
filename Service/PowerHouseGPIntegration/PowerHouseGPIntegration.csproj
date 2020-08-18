@@ -117,6 +117,8 @@
     <Compile Include="eConnectObjects\IEConnectObject.cs" />
     <Compile Include="eConnectObjects\InventoryItemSite.cs" />
     <Compile Include="eConnectObjects\InventoryTransferEntryBatch.cs" />
+    <Compile Include="eConnectObjects\InventoryTrxEntryBatch.cs" />
+    <Compile Include="eConnectObjects\IVInventoryTransaction.cs" />
     <Compile Include="eConnectObjects\IVInventoryTransfer.cs" />
     <Compile Include="eConnectObjects\PopRcptTransaction.cs" />
     <Compile Include="eConnectObjects\ReceivingsTrxEntryBatch.cs" />
