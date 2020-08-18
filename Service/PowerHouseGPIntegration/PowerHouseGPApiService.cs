@@ -26,11 +26,11 @@ namespace BSP.PowerHouse.DynamicsGP.Integration
                 new PowerHouseGPWebOrderService(_powerhouseWsSetting),
                 new PowerHouseGPShipmentService(_powerhouseWsSetting),
                 new PowerHouseGPItemService(_powerhouseWsSetting),
-                //new PowerHouseGPInventoryAdjustmentService(_powerhouseWsSetting)
+                new PowerHouseGPInventoryAdjustmentService(_powerhouseWsSetting)
             };
                 //set timer
-                //_timer = new Timer(_powerhouseWsSetting.BSPFrequency * 60000) { AutoReset = false };
-                _timer = new Timer(_powerhouseWsSetting.BSPFrequency) { AutoReset = false };
+                _timer = new Timer(_powerhouseWsSetting.BSPFrequency * 60000) { AutoReset = false };
+                //_timer = new Timer(_powerhouseWsSetting.BSPFrequency) { AutoReset = false };
                 _timer.Elapsed += SynData;
             }
             catch(Exception ex)
