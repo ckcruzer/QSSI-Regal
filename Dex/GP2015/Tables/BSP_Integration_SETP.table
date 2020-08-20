@@ -47,6 +47,12 @@ Table	"BSP_Integration_SETP"
 			Field	"BSP_InvTrxBatchID"
 			Position	"20"
 		}
+		TableField	"BSP_InvTrxSite"		
+		{
+			Encrypt	"false"
+			Field	"BSP_InvTrxSite"
+			Position	"21"
+		}
 		TableField	"BSP_PHContainerReceivingType"		
 		{
 			Encrypt	"false"

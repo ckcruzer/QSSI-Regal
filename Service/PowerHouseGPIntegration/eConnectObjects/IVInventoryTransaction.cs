@@ -54,7 +54,7 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.eConnectObjects
                     IVDOCTYP = (short)GPIvTrxType.Adjustment,
                     IVDOCNBR = _inventoryAdjustment.ifSeqNum.Value.ToString(),
                     ITEMNMBR = _inventoryAdjustment.itemId,
-                    LOCNCODE = _powerhouseWsSetting.BSPRcvInTransferToSite,
+                    LOCNCODE = _powerhouseWsSetting.BSPInvTrxSite,
                     ADJTYPE = (short)(decimal.Parse(_inventoryAdjustment.signCode + _inventoryAdjustment.pieces.Value) > 0 ? GPIvAdjustmentType.Increase : GPIvAdjustmentType.Decrease),
                     SERLTQTY =  Convert.ToDecimal(_inventoryAdjustment.pieces.Value),
                     LOTNUMBR = _inventoryAdjustment.lotId,
@@ -70,7 +70,7 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.eConnectObjects
                 IVDOCTYP = (short)GPIvTrxType.Adjustment,
                 IVDOCNBR = _inventoryAdjustment.ifSeqNum.Value.ToString(),
                 ITEMNMBR = _inventoryAdjustment.itemId,                
-                TRXLOCTN = _powerhouseWsSetting.BSPRcvInTransferToSite, 
+                TRXLOCTN = _powerhouseWsSetting.BSPInvTrxSite, 
                 TRXQTY = decimal.Parse(_inventoryAdjustment.signCode + _inventoryAdjustment.pieces.Value),
                 Reason_Code = _inventoryAdjustment.hostAdjCode
             };
