@@ -819,11 +819,13 @@ namespace BSP.DynamicsGP.PowerHouse
         public static ReceiptTransfer GetReceiving(string containerID)
         {
             TableError lastError;
+            TableError lastReceiptHeaderError;
             TableError lastLineError;
             ReceiptTransfer receiptTransfer;
             var receivingHdrTable = BusinessSolutionPartners.Tables.BspPowerhouseReceivingHdr;
             var receivingTransferTable = BusinessSolutionPartners.Tables.BspPowerhouseReceivingLine;
             var receivingTransferLineTable = Dynamics.Tables.PopReceiptLineHist;
+            var receiptHistTable = Dynamics.Tables.PopReceiptHist;
             decimal qtyInvoiced, qtyShipped;
             int lineItemSequence = 16384;
             DateTime promisedDate;
@@ -843,7 +845,7 @@ namespace BSP.DynamicsGP.PowerHouse
                 receiptTransfer = new ReceiptTransfer
                 {
                     ContainerID = containerID,
-                    CreatedDate = receivingHdrTable.DateSent.Value
+                    CreatedDate = receivingHdrTable.DateSent.Value,                    
                     //ReceiptNumber = receivingTransferTable.PopReceiptNumber.Value,
                     //VendorID = receivingTransferTable.VendorId.Value,
                     //VendorName = receivingTransferTable.VendorName.Value,
@@ -868,6 +870,19 @@ namespace BSP.DynamicsGP.PowerHouse
                 lastError = receivingTransferTable.GetFirst();
                 while (lastError == TableError.NoError)
                 {
+                    //Add code here to retrieve receipt header information
+                    receiptHistTable.Release();
+                    receiptHistTable.RangeClear();
+                    receiptHistTable.Clear();
+
+                    receiptHistTable.PopReceiptNumber.Value = receivingTransferTable.PopReceiptNumber.Value;
+                    lastReceiptHeaderError = receiptHistTable.Get();
+                    if (lastReceiptHeaderError == TableError.NoError)
+                    {
+                        // Added as per Margie's request 09122020
+                        receiptTransfer.ActualShip = receiptHistTable.ActualShipDate.Value;
+                    }
+
                     //Retrieve all Receipt Line Items
                     // Specify the range for the table
                     // Start of the range

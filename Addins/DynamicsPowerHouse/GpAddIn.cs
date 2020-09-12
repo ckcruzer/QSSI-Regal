@@ -799,6 +799,10 @@ namespace BSP.DynamicsGP.PowerHouse
                 receipt.createdDateSpecified = true;
                 receipt.receiptType = _powerhouseWsSettings.ContainerReceivingType; // CONTR
 
+                // Added as per Margie's request 09122020
+                receipt.dateExpected = receiptTransfer.ActualShip;
+                receipt.dateExpectedSpecified = true;
+
                 var receiptLines = new List<ReceiptLine>();
                 foreach (var item in receiptTransfer.Items)
                 {

@@ -18,6 +18,9 @@ namespace BSP.DynamicsGP.PowerHouse.Models
         public string LocationCode { get; set; }
         public DateTime CreatedDate { get; set; }
 
+        // Added as per Margie's request 09122020
+        public DateTime ActualShip { get; set; }
+
         public List<ReceiptTransferLine> Items { get; set; }
 
     }
