@@ -845,11 +845,7 @@ namespace BSP.DynamicsGP.PowerHouse
                 receiptTransfer = new ReceiptTransfer
                 {
                     ContainerID = containerID,
-                    CreatedDate = receivingHdrTable.DateSent.Value,                    
-                    //ReceiptNumber = receivingTransferTable.PopReceiptNumber.Value,
-                    //VendorID = receivingTransferTable.VendorId.Value,
-                    //VendorName = receivingTransferTable.VendorName.Value,
-                    //DocumentNumber = receivingTransferTable.VendorDocumentNumber.Value,
+                    CreatedDate = receivingHdrTable.DateSent.Value,                                        
                 };
 
                 //Retrieve the Receiving Records
@@ -966,6 +962,7 @@ namespace BSP.DynamicsGP.PowerHouse
                 receivingHdrTable.Close();
                 receivingTransferTable.Close();
                 receivingTransferLineTable.Close();
+                receiptHistTable.Close();
             }
 
             return receiptTransfer;
