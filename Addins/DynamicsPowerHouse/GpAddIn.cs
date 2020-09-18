@@ -114,7 +114,7 @@ namespace BSP.DynamicsGP.PowerHouse
 
                 var responses = SendSalesOrder(salesOrder);
                 if (responses != null)
-                {
+                {   
                     var errors = new List<string>();
                     var releaseNum = string.Empty;
                     foreach (var response in responses)
@@ -261,7 +261,7 @@ namespace BSP.DynamicsGP.PowerHouse
 
         private OrderLine GetOrderLine(SalesTransactionLine line, string pickCompleteFlag)
         {
-            decimal qtyToPick = _powerhouseWsSettings.SOQtyToUse == 1 ? line.Qty : line.QtyAllocated;
+            decimal qtyToPick = _powerhouseWsSettings.SOQtyToUse == 1 ? line.Qty - (line.QtyToBackOrder + line.QtyCancelled) : line.QtyAllocated;
 
 
             return new OrderLine
