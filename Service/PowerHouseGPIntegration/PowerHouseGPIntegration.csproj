@@ -146,6 +146,7 @@
     <Compile Include="Service\PowerHouseGPShipmentService.cs" />
     <Compile Include="Service\PowerHouseGPItemService.cs" />
     <Compile Include="Service\PowerHouseGPWebOrderService.cs" />
+    <Compile Include="Tools\EmailHelper.cs" />
     <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>

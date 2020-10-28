@@ -8,6 +8,7 @@ using RestSharp.Authenticators;
 using System.Net;
 using BSP.PowerHouse.DynamicsGP.Integration.Model;
 using BSP.PowerHouse.DynamicsGP.Integration.Data;
+using BSP.PowerHouse.DynamicsGP.Integration.Tools;
 
 namespace BSP.PowerHouse.DynamicsGP.Integration.Service
 {
@@ -94,6 +95,8 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Service
                             }
                             catch (eConnectException exc)
                             {
+                                EmailHelper.SendEmail(AppSettings.EmailSubject + " PH Shipped Order Download Econnect Failure " + shipment.orderId + "." , exc.Message);
+
                                 if (!string.IsNullOrWhiteSpace(exc.Message) && !exc.Message.Contains("4706")) // don't flag if tran is edit by another user
                                 {
                                     if (AppSettings.SendShipResponse == true)
@@ -114,6 +117,8 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Service
                             }
                             catch (Exception exc)
                             {
+                                EmailHelper.SendEmail(AppSettings.EmailSubject + " PH Shipped Order Download General Exception Failure " + shipment.orderId + ".", exc.Message);
+
                                 if (AppSettings.SendShipResponse == true)
                                 {
                                     var shipmentResponse = new ShipmentResponse

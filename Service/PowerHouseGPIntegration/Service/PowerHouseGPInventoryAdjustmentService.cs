@@ -3,6 +3,7 @@ using BSP.PowerHouse.DynamicsGP.Integration.eConnectObjects;
 //using BSP.PowerHouse.DynamicsGP.Integration.eConnectObjects;
 using BSP.PowerHouse.DynamicsGP.Integration.Model;
 using BSP.PowerHouse.DynamicsGP.Integration.PowerHouseWS;
+using BSP.PowerHouse.DynamicsGP.Integration.Tools;
 using Microsoft.Dynamics.GP.eConnect;
 using RestSharp;
 using RestSharp.Authenticators;
@@ -110,6 +111,8 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Service
             }
             catch (Exception ex)
             {
+                EmailHelper.SendEmail(AppSettings.EmailSubject + " PH Inventory Adjustment General Exception Failure ", ex.Message);
+
                 EventLogUtility.LogException(ex);
             }
             finally
@@ -162,6 +165,8 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Service
             }
             catch (eConnectException exc)
             {
+                EmailHelper.SendEmail(AppSettings.EmailSubject + " PH Inventory Transaction Econnect Failure ", exc.Message);
+
                 //update powerhouse if tried before
                 if (invTrx.ifStatus.HasValue && invTrx.ifStatus.Value > 1)
                 {
@@ -182,6 +187,8 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Service
             }
             catch (Exception exc)
             {
+                EmailHelper.SendEmail(AppSettings.EmailSubject + " PH Inventory Transaction General Failure ", exc.Message);
+
                 EventLogUtility.LogException(exc);
             }
         }
@@ -255,6 +262,8 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Service
                 }
                 catch (eConnectException exc)
                 {
+                    EmailHelper.SendEmail(AppSettings.EmailSubject + " PH Receiving Download Econnect Failure " + receipt.ReceiptNumber + "." , exc.Message);
+
                     if (!string.IsNullOrWhiteSpace(receipt.ReceiptNumber))
                     {
                         documentRollBack.Add(TransactionType.POPReceipt, receipt.ReceiptNumber);
@@ -281,6 +290,8 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Service
                 }
                 catch (Exception exc)
                 {
+                    EmailHelper.SendEmail(AppSettings.EmailSubject + " PH Receiving Download General Failure " + receipt.ReceiptNumber + ".", exc.Message);
+
                     if (!string.IsNullOrWhiteSpace(receipt.ReceiptNumber))
                     {
                         documentRollBack.Add(TransactionType.POPReceipt, receipt.ReceiptNumber);

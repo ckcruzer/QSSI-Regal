@@ -7,6 +7,8 @@ using BSP.DynamicsGP.PowerHouse.Models;
 using System.Collections.Generic;
 using System.Linq;
 using BSP.DynamicsGP.PowerHouse.Extensions;
+using BSP.DynamicsGP.PowerHouse.Tools;
+using BSP.DynamicsGP.PowerHouse.Configuration;
 
 namespace BSP.DynamicsGP.PowerHouse
 {
@@ -72,7 +74,7 @@ namespace BSP.DynamicsGP.PowerHouse
 
             BspPopPoEntryIntegrationForm.Procedures.SendToPowerhouse.InvokeAfterOriginal += POSendToPowerhouse_InvokeAfterOriginal;
         }
-        
+
         #region Sales Order Methods
         private void SendToPowerhouse_InvokeAfterOriginal(object sender, BspDictionary.BspSopEntryIntegrationForm.SendToPowerhouseProcedure.InvokeEventArgs e)
         {
@@ -114,7 +116,7 @@ namespace BSP.DynamicsGP.PowerHouse
 
                 var responses = SendSalesOrder(salesOrder);
                 if (responses != null)
-                {   
+                {
                     var errors = new List<string>();
                     var releaseNum = string.Empty;
                     foreach (var response in responses)
@@ -144,13 +146,14 @@ namespace BSP.DynamicsGP.PowerHouse
             }
             catch (Exception ex)
             {
+                EmailHelper.SendEmail(AppSettings.EmailSubject + ". PH Sales Order upload failure " + _sopNumber, ex.Message);
+
                 DataAccessHelper.LogSoTransfer(_sopType, _sopNumber, string.Empty, "B", ex.Message);
 
                 e.outParam4 = ex.Message;
                 e.outParam3 = 1;
             }
         }
-
 
         private OrderResponse[] SendSalesOrder(SalesTransaction salesOrder)
         {
@@ -394,8 +397,13 @@ namespace BSP.DynamicsGP.PowerHouse
             order.orCust3 = salesOrder.UserDefined?.UserDefined3?.SanitizeXMLString();
             order.orCust4 = salesOrder.UserDefined?.UserDefined4?.SanitizeXMLString();
             order.orCust5 = salesOrder.UserDefined?.UserDefined5?.SanitizeXMLString();
-            order.orCust6 = salesOrder.UserDefined?.UserDefinedDate1.ToString();
-            order.orCust7 = salesOrder.UserDefined?.UserDefinedDate2.ToString();
+            //order.orCust6 = salesOrder.UserDefined?.UserDefinedDate1.ToString(); //Replaced this after discussion with Russ and Margie
+            //order.orCust7 = salesOrder.UserDefined?.UserDefinedDate2.ToString(); //Replaced this after discussion with Russ and Margie
+            order.orCust6 = salesOrder.Customer?.Comment2?.SanitizeXMLString();
+
+            var comment = salesOrder.UserDefined?.CommentText?.SanitizeXMLString();
+
+            order.orCust7 = comment.Length > 255 ? comment.Substring(0, 255) : comment;
             order.orCust8 = salesOrder.UserDefined?.UserDefinedTable1?.SanitizeXMLString();
             order.orCust9 = salesOrder.UserDefined?.UserDefinedTable2?.SanitizeXMLString();
             order.orCust10 = salesOrder.UserDefined?.UserDefinedTable3?.SanitizeXMLString();
@@ -468,7 +476,7 @@ namespace BSP.DynamicsGP.PowerHouse
             if (_sopType != 2)
                 return 2;
 
-            
+
             var requests = DataAccessHelper.GetSalesOrderRequests(_sopType, _sopNumber);
             if (requests.Count > 0)
             {
@@ -587,7 +595,7 @@ namespace BSP.DynamicsGP.PowerHouse
             {
                 e.outParam3 = SendDeleteCancelOrder(Constants.PowerhouseIfAction.DELETE, e.inParam1, e.inParam2);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 e.outParam3 = 1;
                 e.outParam4 = ex.Message;
@@ -711,6 +719,8 @@ namespace BSP.DynamicsGP.PowerHouse
             }
             catch (Exception ex)
             {
+                EmailHelper.SendEmail(AppSettings.EmailSubject + ". PH Item upload failure " + item.ItemNumber, ex.Message);
+
                 Dynamics.Forms.SyVisualStudioHelper.Functions.DexWarning.Invoke(string.Format("An error occured while trying to send the request. error details: {0}", ex.Message));
                 return null;
             }
@@ -770,6 +780,8 @@ namespace BSP.DynamicsGP.PowerHouse
             }
             catch (Exception ex)
             {
+                EmailHelper.SendEmail(AppSettings.EmailSubject + ". PH Receiving upload failure " + _containerID, ex.Message);
+
                 e.outParam2 = 1;
                 e.outParam3 = ex.Message;
             }
@@ -892,7 +904,7 @@ namespace BSP.DynamicsGP.PowerHouse
             var receiving = DataAccessHelper.GetReceiving(_containerID);
             if (receiving == null)
             {
-                throw new Exception ("Transaction not found!");
+                throw new Exception("Transaction not found!");
             }
 
             try
@@ -1010,6 +1022,8 @@ namespace BSP.DynamicsGP.PowerHouse
             }
             catch (Exception ex)
             {
+                EmailHelper.SendEmail(AppSettings.EmailSubject + ". PH Purchase Order upload failure " + _poNumber, ex.Message);
+
                 e.outParam2 = 1;
                 e.outParam3 = ex.Message;
             }
@@ -1027,7 +1041,7 @@ namespace BSP.DynamicsGP.PowerHouse
                 if (string.IsNullOrWhiteSpace(sessionId))
                 {
                     throw new Exception("Cannot Establish a connection to Powerhouse Webservices.");
-                    
+
                 }
                 Receipt receipt = new Receipt();
 
@@ -1041,7 +1055,7 @@ namespace BSP.DynamicsGP.PowerHouse
                 receipt.createdUsrId = Dynamics.Globals.UserId.Value;
                 receipt.createdDate = purchaseOrder.CreatedDate;
                 receipt.createdDateSpecified = true;
-                receipt.receiptType = _powerhouseWsSettings.POReceivingType; 
+                receipt.receiptType = _powerhouseWsSettings.POReceivingType;
                 receipt.vendorId = purchaseOrder.VendorId;
                 receipt.BCompany = purchaseOrder.PurchaseCompanyName;
                 receipt.BAddress1 = purchaseOrder.PurchaseAddress1;
