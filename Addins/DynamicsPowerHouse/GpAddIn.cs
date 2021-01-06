@@ -340,7 +340,9 @@ namespace BSP.DynamicsGP.PowerHouse
             order.shipByDate = salesOrder.RequestedShipDate;
             order.shipByDateSpecified = true;
             order.shipMethod = salesOrder.ShippingMethod?.Id;
-
+            
+            if (salesOrder.Customer != null)
+                order.group3 = salesOrder.Customer.CustomerClass; //RIC 20210104: Added per Margie's request
 
             if (salesOrder.BillToAddress != null)
             {
