@@ -254,7 +254,15 @@ namespace BSP.DynamicsGP.PowerHouse
                         //beacuse it will be null
                         order.totalValue = 0;
                     }
-                    order.totalValue += (ol.price.HasValue && ol.piecesToPick.HasValue) ? ol.price.Value * ol.piecesToPick.Value : 0;
+                    //RIC: Added this condition for kit items to make sure that the value gets added to the order total
+                    if (line.ItemType == 3)
+                    {
+                        order.totalValue += ol.price.HasValue ? ol.price.Value * (Convert.ToDouble((_powerhouseWsSettings.SOQtyToUse == 1 ? line.Qty - (line.QtyToBackOrder + line.QtyCancelled) : line.QtyAllocated) * line.QtyInBaseUOfM)) : 0;
+                    }
+                    else
+                    {
+                        order.totalValue += (ol.price.HasValue && ol.piecesToPick.HasValue) ? ol.price.Value * ol.piecesToPick.Value : 0;
+                    }
                     order.totalValueSpecified = true;
                 }
             }
