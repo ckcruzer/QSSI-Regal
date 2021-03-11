@@ -63,7 +63,7 @@ namespace BSP.PowerHouse.DynamicsGP.Integration
         {
             var services = ServiceController.GetServices().ToList();
 
-            var gpDexService = services.Where(s => s.ServiceName.Equals("GPDS-DEFAULT-15", StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+            var gpDexService = services.Where(s => s.ServiceName.Equals("GPDS-DEFAULT-14", StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
             if (gpDexService != null)
             {
                 if (gpDexService.Status == ServiceControllerStatus.Stopped)

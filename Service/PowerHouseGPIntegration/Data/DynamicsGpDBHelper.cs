@@ -23,6 +23,7 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Data
         private static string SQL_UPDATE_ASN_MANAGER = "sp_UpdateASNManager";
         private static string SQL_FULFILLMENT_POST = "BSP_SopFulfillmentPost";
         private static string SQL_GET_CUSTOMER = "zDP_RM00101SS_1";
+        private static string SQL_GET_CUST_BATCH_MAP = "zDP_BSP_Powerhouse_CustBaSS_1";
 
         #endregion
 
@@ -96,6 +97,25 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Data
 
         #region SOP
 
+        public static SOP10100_DTO GetSalesTransactionHeader(short sopType, string sopNumber)
+        {
+            SqlParameter[] parameters = {
+                                            new SqlParameter(PARM_SOPTYPE, SqlDbType.SmallInt),
+                                            new SqlParameter(PARM_SOPNUMBE, SqlDbType.Char)
+                                        };
+            parameters[0].Value = sopType;
+            parameters[1].Value = sopNumber;
+
+            using (var dr = SqlHelper.ExecuteReader(AppSettings.GPConnectionString, CommandType.StoredProcedure, SQL_GET_SOP_HEADER, parameters))
+            {
+                if (dr.HasRows)
+                {
+                    return TrimStrings(MapDataToBusinessEntityCollection<SOP10100_DTO>(dr).FirstOrDefault());
+                }
+            }
+            return null;
+        }
+
         public static SOP10200_DTO GetSalesTransactionLine(short sopType, string sopNumber, int componentSequence, int lineItemSequence)
         {
             SqlParameter[] parameters = {
@@ -139,20 +159,18 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Data
             return customer?.CUSTPRIORITY == 2;
         }
 
-        public static SOP10100_DTO GetSalesTransactionHeader(short sopType, string sopNumber)
+        public static CustomerBatchMapping GetCustomerBatchMapping(string customerNumber)
         {
             SqlParameter[] parameters = {
-                                            new SqlParameter(PARM_SOPTYPE, SqlDbType.SmallInt),
-                                            new SqlParameter(PARM_SOPNUMBE, SqlDbType.Char)
+                                            new SqlParameter(PARM_CUSTNMBR, SqlDbType.Char, 15)
                                         };
-            parameters[0].Value = sopType;
-            parameters[1].Value = sopNumber;
+            parameters[0].Value = customerNumber;            
 
-            using (var dr = SqlHelper.ExecuteReader(AppSettings.GPConnectionString, CommandType.StoredProcedure, SQL_GET_SOP_HEADER, parameters))
+            using (var dr = SqlHelper.ExecuteReader(AppSettings.GPConnectionString, CommandType.StoredProcedure, SQL_GET_CUST_BATCH_MAP, parameters))
             {
                 if (dr.HasRows)
                 {
-                    return TrimStrings(MapDataToBusinessEntityCollection<SOP10100_DTO>(dr).FirstOrDefault());
+                    return TrimStrings(MapDataToBusinessEntityCollection<CustomerBatchMapping>(dr).FirstOrDefault());
                 }
             }
             return null;

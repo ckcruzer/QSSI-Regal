@@ -73,6 +73,7 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.eConnectObjects
         public taSopHdrIvcInsert GetHeaderRecord()
         {
             SOP10100_DTO sopHeader = DynamicsGpDB.GetSalesTransactionHeader((short)GpSopType.Order, _shipment.orderId);
+            CustomerBatchMapping customerBatchMapping = DynamicsGpDB.GetCustomerBatchMapping(sopHeader.CUSTNMBR);
 
             if (sopHeader == null)
                 throw new Exception("Record does not exist. " + _shipment.orderId);
@@ -115,7 +116,8 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.eConnectObjects
                 SALSTERR = sopHeader.SALSTERR,
                 SLPRSNID = sopHeader.SLPRSNID,
                 UPSZONE = sopHeader.UPSZONE,
-                BACHNUMB = _powerhouseWsSetting.BSPSOPFulfillmentBatchID, // Transfer to new batch
+                //BACHNUMB = _powerhouseWsSetting.BSPSOPFulfillmentBatchID, // Transfer to new batch
+                BACHNUMB = customerBatchMapping == null ? _powerhouseWsSetting.BSPSOPFulfillmentBatchID : customerBatchMapping.BACHNUMB, // Transfer to new batch
                 PRBTADCD = sopHeader.PRBTADCD,
                 PRSTADCD = sopHeader.PRSTADCD,
                 PYMTRMID = sopHeader.PYMTRMID,
