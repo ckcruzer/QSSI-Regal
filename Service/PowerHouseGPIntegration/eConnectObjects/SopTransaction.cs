@@ -201,7 +201,9 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.eConnectObjects
                             //LOCNCODE = detail.olCust2,
                             LOCNCODE = sopLineItem.LOCNCODE, // Just use the same as the one from the original order
                             ITEMNMBR = detail.itemId,
-                            UNITPRCE = Convert.ToDecimal(detail.olCust1),
+                            //RP: Replaced with Original Unit Price after new requirement from Margie
+                            //UNITPRCE = Convert.ToDecimal(detail.olCust1),
+                            UNITPRCE = sopLineItem.UNITPRCE,
                             QUANTITY = sopLineItem.QUANTITY,
                             //UNITCOST = sopLineItem.UNITCOST,
                             //UNITCOSTSpecified = sopLineItem.UNITCOST > 0 ? true : false,

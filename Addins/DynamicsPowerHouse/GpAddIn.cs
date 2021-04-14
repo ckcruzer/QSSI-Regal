@@ -191,9 +191,13 @@ namespace BSP.DynamicsGP.PowerHouse
                         throw new Exception("Cannot Establish a connection to Powerhouse Webservices.");
                     }
                 }
+
+                //LogResult(order);
+
 #if DEBUG
                 //log results
                 //LogResult(orders.ToArray());
+
 #endif
                 //we need to round the order totals here before sending
 
@@ -275,6 +279,15 @@ namespace BSP.DynamicsGP.PowerHouse
         {
             decimal qtyToPick = _powerhouseWsSettings.SOQtyToUse == 1 ? line.Qty - (line.QtyToBackOrder + line.QtyCancelled) : line.QtyAllocated;
 
+            //RIC: Added to check if customer has custom pricing
+            double unitPrice = 0;
+            if (!string.IsNullOrWhiteSpace(line.CustomerItem?.UserDefined1))
+            {
+                if (!double.TryParse(line.CustomerItem?.UserDefined1, out unitPrice))
+                    unitPrice = Convert.ToDouble(line.UnitPrice / line.QtyInBaseUOfM);
+            }
+            else
+                unitPrice = Convert.ToDouble(line.UnitPrice / line.QtyInBaseUOfM);
 
             return new OrderLine
             {
@@ -290,7 +303,7 @@ namespace BSP.DynamicsGP.PowerHouse
                 //RIC: Added to check which qty to use
                 piecesToPick = line.ItemType == 3 && line.ComponentSequence == 0 ? 0 : Convert.ToDouble(qtyToPick * line.QtyInBaseUOfM), // This should be zero if this is the "main" kit item. if inventory item, normal.
                 piecesToPickSpecified = true,
-                price = Convert.ToDouble(line.UnitPrice / line.QtyInBaseUOfM),
+                price = unitPrice,
                 priceSpecified = true,
                 olCust1 = line.UnitPrice.ToString(),
                 olCust2 = line.LocationCode?.SanitizeXMLString(),
