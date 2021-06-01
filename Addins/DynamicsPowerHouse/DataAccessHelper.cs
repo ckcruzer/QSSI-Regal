@@ -514,7 +514,8 @@ namespace BSP.DynamicsGP.PowerHouse
                     Comment1 = customerMstrTable.Comment1.Value,
                     Comment2 = customerMstrTable.Comment2.Value,
                     PrimaryShipToAddressCode = customerMstrTable.PrimaryShiptoAddressCode.Value,
-                    CustomerPriority = customerMstrTable.CustomerPriority.Value
+                    CustomerPriority = customerMstrTable.CustomerPriority.Value,
+                    CustomerClass = customerMstrTable.CustomerClass.Value //RIC 20210104: Added per Margie's request
                 };
             }
             catch (Exception ex)

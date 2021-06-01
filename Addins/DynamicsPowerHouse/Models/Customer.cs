@@ -10,5 +10,8 @@
         public string PrimaryShipToAddressCode { get; set; }
 
         public short CustomerPriority { get; set; }
+
+        //RIC 20210104: Added per Margie's request
+        public string CustomerClass { get; set; }
     }
 }
