@@ -514,7 +514,8 @@ namespace BSP.DynamicsGP.PowerHouse
                     Comment1 = customerMstrTable.Comment1.Value,
                     Comment2 = customerMstrTable.Comment2.Value,
                     PrimaryShipToAddressCode = customerMstrTable.PrimaryShiptoAddressCode.Value,
-                    CustomerPriority = customerMstrTable.CustomerPriority.Value
+                    CustomerPriority = customerMstrTable.CustomerPriority.Value,
+                    CustomerClass = customerMstrTable.CustomerClass.Value //RIC 20210104: Added per Margie's request
                 };
             }
             catch (Exception ex)
@@ -819,11 +820,13 @@ namespace BSP.DynamicsGP.PowerHouse
         public static ReceiptTransfer GetReceiving(string containerID)
         {
             TableError lastError;
+            TableError lastReceiptHeaderError;
             TableError lastLineError;
             ReceiptTransfer receiptTransfer;
             var receivingHdrTable = BusinessSolutionPartners.Tables.BspPowerhouseReceivingHdr;
             var receivingTransferTable = BusinessSolutionPartners.Tables.BspPowerhouseReceivingLine;
             var receivingTransferLineTable = Dynamics.Tables.PopReceiptLineHist;
+            var receiptHistTable = Dynamics.Tables.PopReceiptHist;
             decimal qtyInvoiced, qtyShipped;
             int lineItemSequence = 16384;
             DateTime promisedDate;
@@ -843,11 +846,7 @@ namespace BSP.DynamicsGP.PowerHouse
                 receiptTransfer = new ReceiptTransfer
                 {
                     ContainerID = containerID,
-                    CreatedDate = receivingHdrTable.DateSent.Value
-                    //ReceiptNumber = receivingTransferTable.PopReceiptNumber.Value,
-                    //VendorID = receivingTransferTable.VendorId.Value,
-                    //VendorName = receivingTransferTable.VendorName.Value,
-                    //DocumentNumber = receivingTransferTable.VendorDocumentNumber.Value,
+                    CreatedDate = receivingHdrTable.DateSent.Value,                                        
                 };
 
                 //Retrieve the Receiving Records
@@ -868,6 +867,19 @@ namespace BSP.DynamicsGP.PowerHouse
                 lastError = receivingTransferTable.GetFirst();
                 while (lastError == TableError.NoError)
                 {
+                    //Add code here to retrieve receipt header information
+                    receiptHistTable.Release();
+                    receiptHistTable.RangeClear();
+                    receiptHistTable.Clear();
+
+                    receiptHistTable.PopReceiptNumber.Value = receivingTransferTable.PopReceiptNumber.Value;
+                    lastReceiptHeaderError = receiptHistTable.Get();
+                    if (lastReceiptHeaderError == TableError.NoError)
+                    {
+                        // Added as per Margie's request 09122020
+                        receiptTransfer.ActualShip = receiptHistTable.ActualShipDate.Value;
+                    }
+
                     //Retrieve all Receipt Line Items
                     // Specify the range for the table
                     // Start of the range
@@ -951,6 +963,7 @@ namespace BSP.DynamicsGP.PowerHouse
                 receivingHdrTable.Close();
                 receivingTransferTable.Close();
                 receivingTransferLineTable.Close();
+                receiptHistTable.Close();
             }
 
             return receiptTransfer;

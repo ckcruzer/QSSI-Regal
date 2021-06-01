@@ -1,29 +1,17 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace BSP.PowerHouse.DynamicsGP.Integration.Configuration
+namespace BSP.DynamicsGP.PowerHouse.Configuration
 {
     public static class AppSettings
     {
         private static readonly NameValueCollection _appSettings = ConfigurationManager.AppSettings;
-
-        private static string _gpConnectionString = ConfigurationManager.ConnectionStrings["GPConnectionString"].ConnectionString;
-
-        public static string GPConnectionString { get { return _gpConnectionString; } }
-        public static bool TracingEnabled { get { return GetAppSetting("TracingEnabled", true); } }
-
-        public static int GPCompanyID { get { return GetAppSetting("GPCompanyID", -1); } }
-        public static string GPCompanyName { get { return GetAppSetting("GPCompanyName", string.Empty); } }
-
-        public static string PowerhouseEndpoint { get { return GetAppSetting("PowerHouseEndpointName", string.Empty); } }
-
-        public static bool SendShipResponse {  get { return GetAppSetting("BSPSendShipResp", false); } }
-
-        public static string DefaultCurrency { get { return GetAppSetting("DefaultCurrency", "Z-US$"); } }
-
-        public static string InterID { get { return GetAppSetting("InterID", string.Empty); } }
 
         public static string FromEmailAddress { get { return GetAppSetting("FromEmailAddress", string.Empty); } }
 
@@ -36,6 +24,7 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Configuration
         public static string EmailUserName { get { return GetAppSetting("EmailUserName", string.Empty); } }
         public static string EmailPassword { get { return GetAppSetting("EmailPassword", string.Empty); } }
         public static string EmailHost { get { return GetAppSetting("EmailHost", string.Empty); } }
+        public static string EmailAttachment { get { return GetAppSetting("EmailAttachment", string.Empty); } }
 
 
         #region Helper Methods
@@ -54,7 +43,7 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Configuration
                 catch { } // nothing to do, just return default
             }
             return defaultValue;
-        } 
+        }
         #endregion
     }
 }

@@ -5,6 +5,7 @@ using BSP.PowerHouse.DynamicsGP.Integration.Service;
 using System.Collections.Generic;
 using BSP.PowerHouse.DynamicsGP.Integration.Model;
 using BSP.PowerHouse.DynamicsGP.Integration.Data;
+using BSP.PowerHouse.DynamicsGP.Integration.Tools;
 
 namespace BSP.PowerHouse.DynamicsGP.Integration
 {
@@ -23,14 +24,14 @@ namespace BSP.PowerHouse.DynamicsGP.Integration
                 _powerhouseWsSetting = DynamicsGpDB.GetPowerhouseIntegrationSettings();
                 _services = new List<IPowerHouseGPService>
             {
-                //new PowerHouseGPWebOrderService(_powerhouseWsSetting),
-                //new PowerHouseGPShipmentService(_powerhouseWsSetting),
-                //new PowerHouseGPItemService(_powerhouseWsSetting)
+                new PowerHouseGPWebOrderService(_powerhouseWsSetting),
+                new PowerHouseGPShipmentService(_powerhouseWsSetting),
+                new PowerHouseGPItemService(_powerhouseWsSetting),
                 new PowerHouseGPInventoryAdjustmentService(_powerhouseWsSetting)
             };
                 //set timer
-                //_timer = new Timer(_powerhouseWsSetting.BSPFrequency * 60000) { AutoReset = false };
-                _timer = new Timer(_powerhouseWsSetting.BSPFrequency) { AutoReset = false };
+                _timer = new Timer(_powerhouseWsSetting.BSPFrequency * 60000) { AutoReset = false };
+                //_timer = new Timer(_powerhouseWsSetting.BSPFrequency) { AutoReset = false };
                 _timer.Elapsed += SynData;
             }
             catch(Exception ex)
@@ -85,13 +86,17 @@ namespace BSP.PowerHouse.DynamicsGP.Integration
         #region Timer Start/Stop
         public void Start()
         {
-            _timer.Start();
+            EmailHelper.SendEmail("Powerhouse to GP Integration: The service has started.", "");
+
+            _timer.Start();            
         }
 
         public void Stop()
         {
+            EmailHelper.SendEmail("Powerhouse to GP Integration: The service has stopped.", "");
+
             _serviceStopped = true;
-            _timer.Stop();
+            _timer.Stop();            
         }
 
         #endregion

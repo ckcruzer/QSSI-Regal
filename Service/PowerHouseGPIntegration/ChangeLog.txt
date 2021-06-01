@@ -1,0 +1,10 @@
+﻿1.0.0.5
+	- Fixed the SOP Item and Component Item location code issue.
+
+1.0.1.0
+	- Added the Receiving Component
+
+1.0.1.1
+	- Updated Batch Freq Enum. Started at 1
+	- Added the Inv Adjustments
+

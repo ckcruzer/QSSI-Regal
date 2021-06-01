@@ -103,6 +103,13 @@ Field	"BSP_GPWS_URL"
 	LookupForm	""
 	PhysicalName	"BSPGPWSURL"
 }
+Field	"BSP_InvTrxSite"
+{
+	ArraySize	"0"
+	Datatype	"STR10_Location_Code"
+	LookupForm	""
+	PhysicalName	"BSPInvTrxSite"
+}
 Field	"gpOldFieldList"
 {
 	ArraySize	"0"

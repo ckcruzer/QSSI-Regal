@@ -1,5 +1,6 @@
 ﻿using BSP.PowerHouse.DynamicsGP.Integration.Configuration;
 using BSP.PowerHouse.DynamicsGP.Integration.Model;
+using BSP.PowerHouse.DynamicsGP.Integration.Tools;
 using RestSharp;
 using RestSharp.Authenticators;
 using System;
@@ -39,6 +40,8 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Service
                     var response = client.Execute(request);
                     if (!response.IsSuccessful)
                     {
+                        EmailHelper.SendEmail(AppSettings.EmailSubject + " PH Item Upload General Exception Failure.", response.ErrorMessage);
+
                         //log error
                         var errorMsg = $"GP Service Error:\r\n\r\nResource: {request.Resource} \r\n\r\nParameters: \r\n\r\n{string.Join("\r\n", request.Parameters)} \r\n\r\nResponse Content: \r\n\r\n{response.Content}";
                         EventLogUtility.LogWarningMessage(errorMsg);
@@ -46,6 +49,8 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Service
                 }
                 catch (Exception ex)
                 {
+                    EmailHelper.SendEmail(AppSettings.EmailSubject + " PH Item Upload General Exception Failure.", ex.Message);
+
                     EventLogUtility.LogException(ex);
                 }
             }

@@ -48,6 +48,7 @@
       <HintPath>..\..\..\..\Program Files (x86)\Microsoft Dynamics\GP2015 VS Tools SDK\Microsoft.Dexterity.Bridge.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.EnterpriseServices" />
@@ -55,6 +56,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\AppSettings.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="DataAccessHelper.cs" />
     <Compile Include="Extensions\DoubleExtension.cs" />
@@ -87,6 +89,7 @@
     <Compile Include="Models\ShippingMethod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\SalesOrderStatus.cs" />
+    <Compile Include="Tools\EmailHelper.cs" />
     <Compile Include="Web References\PowerhouseWS\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

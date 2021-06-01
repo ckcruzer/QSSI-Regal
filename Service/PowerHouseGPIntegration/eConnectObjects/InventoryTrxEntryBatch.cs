@@ -1,5 +1,6 @@
 ﻿using BSP.PowerHouse.DynamicsGP.Integration.Configuration;
 using BSP.PowerHouse.DynamicsGP.Integration.Extensions;
+using BSP.PowerHouse.DynamicsGP.Integration.Model;
 using System;
 using System.Globalization;
 
@@ -7,24 +8,24 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.eConnectObjects
 {
     public class InventoryTrxEntryBatch : SMTransactionBatch
     {
-        private readonly DynamicsGpSettings _dynamicsGpSettings;
-        public InventoryTrxEntryBatch(DynamicsGpSettings dynamicsGpSettings)
+        private readonly PowerhouseWsSetting _powerhouseWsSetting;
+        public InventoryTrxEntryBatch(PowerhouseWsSetting powerhouseWsSetting)
         {
-            this._dynamicsGpSettings = dynamicsGpSettings;
+            this._powerhouseWsSetting = powerhouseWsSetting;
             this.GpOrigin = GpOrigin.TransactionEntry;
             this.GpSeries = GpSeries.Inventory;
             this.BatchSource = "IV_Trxent";
             this.BatchCheckBookId = string.Empty;
             this.BatchComments = "Powerhouse Inventory Trx import";
-            if (_dynamicsGpSettings != null)
+            if (_powerhouseWsSetting != null)
             {
                 DateTimeFormatInfo dfi = DateTimeFormatInfo.CurrentInfo;
-                string batchNumber = !string.IsNullOrWhiteSpace(_dynamicsGpSettings.ReceivingsTrxBatchId) ? _dynamicsGpSettings.InventoryTrxBatchId : "PHIV";
-                if (!string.IsNullOrWhiteSpace(batchNumber) && _dynamicsGpSettings.BatchFrequency != Domain.BatchFrequency.Once)
+                string batchNumber = !string.IsNullOrWhiteSpace(_powerhouseWsSetting.BSPInvTrxBatchID) ? _powerhouseWsSetting.BSPInvTrxBatchID : "PHIV";
+                if (!string.IsNullOrWhiteSpace(batchNumber) && _powerhouseWsSetting.BSPBatchFrequency != Domain.BatchFrequency.Once)
                 {
                     batchNumber += "-";
                 }
-                switch (_dynamicsGpSettings.BatchFrequency)
+                switch (_powerhouseWsSetting.BSPBatchFrequency)
                 {
                     case Domain.BatchFrequency.Once:
                         break;
