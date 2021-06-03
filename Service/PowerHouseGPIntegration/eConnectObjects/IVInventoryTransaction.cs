@@ -36,8 +36,8 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.eConnectObjects
 
             inventoryTrx.taIVTransactionHeaderInsert = GetTrxHeader();
             inventoryTrx.taIVTransactionLineInsert_Items = GetTrxLines();
-            if (!string.IsNullOrWhiteSpace(_inventoryAdjustment.lotId))
-                inventoryTrx.taIVTransactionLotInsert_Items = GetTrxLineLots();
+            //if (!string.IsNullOrWhiteSpace(_inventoryAdjustment.lotId)) // REGAL does not have lots but would leave this just in case they add in the future
+                //inventoryTrx.taIVTransactionLotInsert_Items = GetTrxLineLots();
 
             IVInventoryTransactionType[] ivInventoryTransactionType = { inventoryTrx };
 
