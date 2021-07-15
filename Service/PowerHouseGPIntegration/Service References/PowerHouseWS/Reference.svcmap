@@ -19,10 +19,10 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://18.224.66.250:8083/PHWebServices/services/PHWebServices?wsdl" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://regal.qssi-wms.com:8083/PHWebServices/services/PHWebServices?wsdl" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="PHWebServices1.wsdl" MetadataType="Wsdl" ID="760613c7-759c-47b4-8243-ca8c9d514b19" SourceId="1" SourceUrl="http://18.224.66.250:8083/PHWebServices/services/PHWebServices?wsdl" />
+    <MetadataFile FileName="PHWebServices.wsdl" MetadataType="Wsdl" ID="d2ebcaac-32e3-4d07-bea8-5a3596c16e2d" SourceId="1" SourceUrl="http://regal.qssi-wms.com:8083/PHWebServices/services/PHWebServices?wsdl" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

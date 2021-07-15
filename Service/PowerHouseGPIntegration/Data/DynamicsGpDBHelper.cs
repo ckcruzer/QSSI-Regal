@@ -23,6 +23,7 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Data
         private static string SQL_UPDATE_ASN_MANAGER = "sp_UpdateASNManager";
         private static string SQL_FULFILLMENT_POST = "BSP_SopFulfillmentPost";
         private static string SQL_GET_CUSTOMER = "zDP_RM00101SS_1";
+        private static string SQL_GET_CUSTOMER_BATCH = "zDP_BSP_Powerhouse_CustBaSS_1";
 
         #endregion
 
@@ -153,6 +154,23 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Data
                 if (dr.HasRows)
                 {
                     return TrimStrings(MapDataToBusinessEntityCollection<SOP10100_DTO>(dr).FirstOrDefault());
+                }
+            }
+            return null;
+        }
+
+        public static CustomerBatch GetCustomerBatch(string customerNumber)
+        {
+            SqlParameter[] parameters = {
+                                            new SqlParameter(PARM_CUSTNMBR, SqlDbType.Char, 15)                                            
+                                        };
+            parameters[0].Value = customerNumber;            
+
+            using (var dr = SqlHelper.ExecuteReader(AppSettings.GPConnectionString, CommandType.StoredProcedure, SQL_GET_CUSTOMER_BATCH, parameters))
+            {
+                if (dr.HasRows)
+                {
+                    return TrimStrings(MapDataToBusinessEntityCollection<CustomerBatch>(dr).FirstOrDefault());
                 }
             }
             return null;

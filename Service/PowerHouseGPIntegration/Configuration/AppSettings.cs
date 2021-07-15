@@ -37,6 +37,13 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Configuration
         public static string EmailPassword { get { return GetAppSetting("EmailPassword", string.Empty); } }
         public static string EmailHost { get { return GetAppSetting("EmailHost", string.Empty); } }
 
+        public static bool AutoPostInventoryTrx { get { return GetAppSetting("AutoPostInventoryTrx", true); } }
+
+        public static bool GPSBAUseDefaultCredentials { get { return GetAppSetting("GPSBAUseDefaultCredentials", true); } }
+        public static string GPSBAUserId { get { return GetAppSetting("GPSBAUserId", string.Empty); } }
+        public static string GPSBAPassword { get { return GetAppSetting("GPSBAPassword", string.Empty); } }
+        public static string GPSBADomain { get { return GetAppSetting("GPSBADomain", string.Empty); } }
+
 
         #region Helper Methods
         private static T GetAppSetting<T>(string searchKey, T defaultValue)

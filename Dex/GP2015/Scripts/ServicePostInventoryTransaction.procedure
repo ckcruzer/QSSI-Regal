@@ -1,0 +1,325 @@
+Procedure	"ServicePostInventoryTransaction"
+{
+	Core	"Inventory"
+	Documentation	""
+	Script	"in 'IV Document Type'		Type;
+in 'IV Document Number'		Number; 
+
+local integer						nStatus;
+local TraceState					Trace;
+
+local boolean 			l_Permission, l_ok, l_reprint_journal, l_Posted_OK, 
+						l_reprint, l_append, l_post_to_gl, l_period_closed, l_edit_list;
+local integer 			l_err, l_line_error, Status;
+local	'TRX Source'	l_trx_source;
+local	'Sequence Line' l_Seq_Line;
+local	'Period ID'		FiscalPeriod;
+local	'Year'			FiscalYear;
+local	boolean			fCleanUpGL_BasedOnThisTrx; 
+local 	'TRX Source'		sPerpAdjustTrxSrc;		{Batch ID for any Perpetual revaluation}
+local	'Journal Entry'		nPerpAdjustJE;			{Journal Entry for any Perpetual revaluation}						
+local	'Sequence Line'		nPerpAdjustSeq;			{Journal Entry Line Number for any Perpetual revaluation}
+local	integer				nPerpAdjustErr;			{Journal Entry Err Number for any Perpetual revaluation}
+local	boolean		Success;
+local	integer		ErrorMessage;
+
+local	string		l_type,					{IVTRX or IVTRF}
+					l_filename,
+					l_GL_BATCH_NUMBER,
+					l_transaction_source;	{for \"Transaction Entry\"}
+local	integer		l_window, l_Err_Msg;
+local 'Batch Source' l_batch_source;
+local	long		l_JOURNAL_ENTRY;
+
+local 	'IV Document Number' 	sNumber;
+
+nStatus = Create(Trace) of form Trace;
+assert nStatus = OKAY;
+
+clear 'Service Error' of globals;
+
+call Trace of form Trace, Trace, OKAY, technicalname(script ServiceCreateTimecard, QUALIFY_FULL), getmsg(12667);
+
+try
+	if not 'Module Registered'[INVEN] of globals then
+		{This module isn't registered. To register this module, contact your @PROD0@ representative.}
+		call TraceAdd of form Trace, Trace, TRACE_FAILURE, 5967, GET_MESSAGE, technicalname(script ServicePostInventoryTransaction, QUALIFY_FULL), , , ERROR_TYPE_BAD_REQUEST;
+		throw INVALID;
+	end if;
+	
+	nStatus = AssignTraceReference(Trace);
+	if nStatus <> OKAY then
+		throw INVALID;
+	end if;
+	
+	if (empty(Type) or empty(Number))then
+		call TraceAdd of form Trace, Trace, TRACE_FAILURE, 6058 {Not all required fields have been entered.}, GET_MESSAGE, technicalname(script ServicePostInventoryTransaction, QUALIFY_FULL), , , ERROR_TYPE_BAD_REQUEST;
+		throw INVALID;	
+	end if;
+	
+	sNumber = upper(Number);
+	if sNumber <> upper(Number) then
+		call TraceAdd of form Trace, field(GetTraceReference()), TRACE_FAILURE, 605, {Invalid length for string} GET_MESSAGE, technicalname('IV Document Number' of table IV_TRX_WORK_HDR, QUALIFY_FULL);
+		throw INVALID;
+	end if;	
+	
+	
+	
+	{init}
+	set l_Posted_OK to true;
+	set l_reprint to false;
+	set l_edit_list to false;
+	clear FiscalPeriod, FiscalYear;
+	
+	{--- set local fields to correct strings ---}
+	if Type = 1 then
+		set l_type to getmsg(240);					{IVADJ}
+		set l_transaction_source to TRX_SOURCE_IV_TRX_ENTRY;
+		set l_window to IVTRX;						{Sequence Number}
+		set l_batch_source to XIV_TRXENT_STR;
+	else
+		set l_type to getmsg(241);					{IVTFR}
+		set l_transaction_source to TRX_SOURCE_IV_TRANSFER;
+		set l_window to IVTRF;						{Sequence Number}
+		set l_batch_source to XIV_TRANS_STR;
+	end if;
+	
+	{--- check for utility processing ---}
+	call INVEN_Check_Utilities, 
+		false, {give warning}
+		Status;
+
+	if Status <> OKAY then
+		{Utility process is running.}
+		call TraceAdd of form Trace, Trace, TRACE_FAILURE, 20196, WARNING_MESSAGE, technicalname(script ServicePostInventoryTransaction, QUALIFY_FULL), , , ERROR_TYPE_BAD_REQUEST;
+		throw INVALID;
+	end if;
+	
+	{--- check to see if user has permission to post ---}
+	call Check_Posting_Permission,
+		INVENTORY,
+		1{IVTRX},
+		l_Permission;
+
+	if (not l_Permission) then
+		call TraceAdd of form Trace, Trace, TRACE_FAILURE, 20174 {You do not have permission to post this transaction}, WARNING_MESSAGE, technicalname(script ServicePostInventoryTransaction, QUALIFY_FULL), , , ERROR_TYPE_BAD_REQUEST;
+		throw INVALID;
+	end if;
+	
+	{--- check to see if transaction posting is allowed ---}
+	call Allow_IV_Transaction_Posting,
+			l_type,
+			l_Permission;
+
+	if (not l_Permission) then	
+		call TraceAdd of form Trace, Trace, TRACE_FAILURE, 8400 {Sorry, you can not post at the transaction level}, WARNING_MESSAGE, technicalname(script ServicePostInventoryTransaction, QUALIFY_FULL), , , ERROR_TYPE_BAD_REQUEST;
+		throw INVALID;
+	end if;
+	
+	clear file SY_Posting_Journal_Settings;
+	set 'Series' of file SY_Posting_Journal_Settings to INVENTORY;
+	set 'Transaction Source' of file SY_Posting_Journal_Settings to l_transaction_source;
+	get file SY_Posting_Journal_Settings;
+
+	if ('Post to General Ledger' of file SY_Posting_Journal_Settings) and ('Module Loaded'[GL] of globals) and ('Module Registered'[GL] of globals) then
+		set l_post_to_gl to true;
+	end if;
+	
+	release file IV_TRX_WORK_HDR;
+	set 'IV Document Type' of file IV_TRX_WORK_HDR to Type;
+	set 'IV Document Number' of file IV_TRX_WORK_HDR to Number;
+	change file IV_TRX_WORK_HDR by number 2;
+	
+	if err()=LOCKED or err()=DUPLICATE then
+		call TraceAdd of form Trace, field(GetTraceReference()), TRACE_FAILURE, 20500, WARNING_MESSAGE, technicalname(field 'IV Document Number',QUALIFY_FULL);
+		throw INVALID;
+	end if;
+
+	set 'Batch Source' of file IV_TRX_WORK_HDR to l_batch_source;
+	set 'Batch Number' of table IV_TRX_WORK_HDR to 'User ID' of globals;
+	
+	save file IV_TRX_WORK_HDR;
+	
+	
+	release file IV_TRX_WORK_HDR;
+	set 'IV Document Type' of file IV_TRX_WORK_HDR to Type;
+	set 'IV Document Number' of file IV_TRX_WORK_HDR to Number;
+	change file IV_TRX_WORK_HDR by number 2;
+	
+	if err()=LOCKED or err()=DUPLICATE then
+		call TraceAdd of form Trace, field(GetTraceReference()), TRACE_FAILURE, 20500, WARNING_MESSAGE, technicalname(field 'IV Document Number',QUALIFY_FULL);
+		throw INVALID;
+	end if;
+	
+	
+	
+	{--- Verify GL Posting Date ---}
+	call Calculate_GL_Period,
+		INVENTORY,
+		l_transaction_source,
+		'GL Posting Date' of table IV_TRX_WORK_HDR,
+		FiscalPeriod,
+		l_period_closed,
+		FiscalYear,
+		l_err;
+
+	if l_period_closed then
+		if (l_post_to_gl) then
+			{only fail if posting to GL}
+			call TraceAdd of form Trace, Trace, TRACE_FAILURE, 20241 {Period Closed}, WARNING_MESSAGE, technicalname(script ServicePostInventoryTransaction, QUALIFY_FULL), , , ERROR_TYPE_BAD_REQUEST;
+			throw INVALID;
+		end if;
+	elseif l_err = 2 then
+		if (l_post_to_gl) then
+			{only fail if posting to GL}
+			call TraceAdd of form Trace, Trace, TRACE_FAILURE, 20240 {Period does not exit}, WARNING_MESSAGE, technicalname(script ServicePostInventoryTransaction, QUALIFY_FULL), , , ERROR_TYPE_BAD_REQUEST;
+			throw INVALID;
+		end if;
+	end if;
+	
+	{--- Add Batch_Headers record for the User ID ---}
+	clear file Batch_Headers;
+	set 'Batch Source' of file Batch_Headers to l_batch_source;
+	set 'Batch Number' of file Batch_Headers to 'User ID' of globals;
+	change file Batch_Headers;
+	set Series of file Batch_Headers to INVENTORY;
+	set 'Marked To Post' of file Batch_Headers to true;
+	set 'GL Posting Date' of file Batch_Headers to 'GL Posting Date' of file IV_TRX_WORK_HDR;
+	set 'Batch Frequency' of file Batch_Headers to 1;
+	set 'Delete Batch' of file Batch_Headers to true;
+	set 'Post To GL' of file Batch_Headers to true;
+	set 'User ID' of file Batch_Headers to 'User ID' of globals;
+	save file Batch_Headers;
+	
+	{--- get next trx source ---}
+	call Posting_Get_Next_TRX_Source,
+		INVENTORY,
+		l_type,  { IVADJ }
+		l_trx_source,
+		l_reprint_journal,
+		l_ok;
+	
+	if not l_ok then
+		call TraceAdd of form Trace, Trace, TRACE_FAILURE, 20240 {Period does not exit}, WARNING_MESSAGE, technicalname(script ServicePostInventoryTransaction, QUALIFY_FULL), , , ERROR_TYPE_BAD_REQUEST;
+		throw INVALID;
+	end if;
+	
+	
+	{--- get reprint nt ---}
+	clear file SY_Transaction_Source_MSTR;
+	set 'Series' of file SY_Transaction_Source_MSTR to INVENTORY;
+	set 'Transaction Source Prefix' of file SY_Transaction_Source_MSTR to l_type;
+	get file SY_Transaction_Source_MSTR;
+	if err()=OKAY then
+		if 'Reprint NT' of file SY_Transaction_Source_MSTR then
+			set l_reprint to true;
+		else
+			set l_reprint to false;
+		end if;
+	else
+		set l_reprint to false;
+	end if;
+	
+	call IV_Post_Transaction,
+		true,
+		l_trx_source,
+		l_edit_list,
+		l_reprint,
+		l_post_to_gl,
+		TRX_WINDOW,
+		true,
+		false, 
+		FiscalPeriod, 
+		FiscalYear, 
+		l_GL_BATCH_NUMBER,
+		l_Posted_OK,
+		l_JOURNAL_ENTRY,
+		fCleanUpGL_BasedOnThisTrx,
+		l_Seq_Line,
+		'Source Document' of file SY_Transaction_Source_MSTR,
+		l_line_error,
+		file IV_Cost_Variance_TEMP, 
+		file IV_TRX_WORK_HDR,
+		file IV_Distribution_TEMP,
+		file SY_Posting_Journal_Settings,
+		file Batch_Headers,
+		table IV_Posting_TEMP,
+		table GL_Account_MSTR,
+		sPerpAdjustTrxSrc,
+		nPerpAdjustJE,					
+		nPerpAdjustSeq,
+		nPerpAdjustErr;	
+		
+	if (not l_Posted_OK) then
+		throw TRACE_FAILURE;
+	end if;
+
+	if (l_post_to_gl) and (fCleanUpGL_BasedOnThisTrx) then
+		{Call the GL cleanup script.}	
+		call GL_BB_Clean_Up, 
+			'Auto Post To GL' of file SY_Posting_Journal_Settings,
+			TRX_WINDOW, 
+			l_GL_BATCH_NUMBER, 
+			ErrorMessage, 
+			Success, 
+			false, {print report}
+			false, {screen}
+			false, {printer}
+			0, {export type}
+			\"\"; {filename}
+
+	end if;
+	
+	if not empty(sPerpAdjustTrxSrc) then
+		{iv reluatino batch was created}
+		call GL_BB_Clean_Up,
+			'Auto Post To GL' of file SY_Posting_Journal_Settings,
+			TRX_WINDOW,
+			sPerpAdjustTrxSrc,
+			ErrorMessage,
+			Success,
+			false, {print report}
+			false, {screen}
+			false, {printer}
+			0, {export type}
+			\"\"; {filename}
+	end if;
+	
+	call IV_Update_Batch,
+		l_batch_source,
+		'User ID' of globals,
+		false,
+		false,
+		l_transaction_source,
+		TRF_WINDOW,
+		false;		{--- Assume no batch errors saved ---}
+	
+	if GetTraceError(Trace) of form Trace = TRACE_FAILURE then
+		throw TRACE_FAILURE;
+	end if;
+	
+catch [INVALID]
+	{ no cleanup so just return errors }
+	release file IV_TRX_WORK_HDR;
+catch [TRACE_FAILURE]
+	release file IV_TRX_WORK_HDR;
+else
+	release file IV_TRX_WORK_HDR;
+	call Trace of form Trace, Trace, TRACE_FAILURE, technicalname(script ServicePostInventoryTransaction, QUALIFY_FULL), substring(Exception_Message(), 1, 255);
+end try;
+
+{call Trace of form Trace, Trace, OKAY, technicalname(script ServicePostInventoryTransaction, QUALIFY_FULL), getmsg(12668);}
+
+
+
+
+
+
+"
+	ServiceAction	"Custom"
+	ServiceCustomAciton	"POST"
+	ServiceEnabled	"TRUE"
+	ServiceRawRequest	"FALSE"
+	ServiceUriTemplate	"Inventory/Transactions({Type};{Number})"
+	UserProperties	""
+}

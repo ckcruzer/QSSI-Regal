@@ -33,9 +33,20 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Service
                     var resource = $"Tenants(DefaultTenant)/Companies(" + AppSettings.GPCompanyName + ")/BusinessSolutionPartners/Inventory/PHItemIntegration";
                     var request = new RestRequest(resource, Method.POST);
 
-                    
-                    request.UseDefaultCredentials = true;
-                    
+
+                    if (!AppSettings.GPSBAUseDefaultCredentials)
+                    {
+                        client.Authenticator = new NtlmAuthenticator(
+                            new NetworkCredential(
+                                AppSettings.GPSBAUserId,
+                                AppSettings.GPSBAPassword,
+                                AppSettings.GPSBADomain));
+                    }
+                    else
+                    {
+                        request.UseDefaultCredentials = true;
+                    }
+
 
                     var response = client.Execute(request);
                     if (!response.IsSuccessful)

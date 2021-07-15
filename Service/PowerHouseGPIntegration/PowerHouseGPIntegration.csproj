@@ -66,11 +66,11 @@
   <ItemGroup>
     <Reference Include="Microsoft.Dynamics.GP.eConnect, Version=16.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\Program Files\Microsoft Dynamics\eConnect 16.0\API\Microsoft.Dynamics.GP.eConnect.dll</HintPath>
+      <HintPath>..\..\..\..\Program Files (x86)\Microsoft Dynamics\eConnect 14.0\API\Microsoft.Dynamics.GP.eConnect.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Dynamics.GP.eConnect.Serialization, Version=16.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\Program Files\Microsoft Dynamics\eConnect 16.0\API\Microsoft.Dynamics.GP.eConnect.Serialization.dll</HintPath>
+      <HintPath>..\..\..\..\Program Files (x86)\Microsoft Dynamics\eConnect 14.0\API\Microsoft.Dynamics.GP.eConnect.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="RestSharp, Version=106.6.9.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
       <HintPath>..\packages\RestSharp.106.6.9\lib\net452\RestSharp.dll</HintPath>
@@ -97,6 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\DynamicsGpDBHelper.cs" />
+    <Compile Include="Domain\CustomerBatch.cs" />
     <Compile Include="Domain\RM00101_DTO.cs" />
     <Compile Include="Domain\SOP10100_DTO.cs" />
     <Compile Include="Data\SqlHelper.cs" />
@@ -402,7 +403,7 @@
     <None Include="Service References\PowerHouseWS\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\PowerHouseWS\PHWebServices1.wsdl" />
+    <None Include="Service References\PowerHouseWS\PHWebServices.wsdl" />
     <None Include="Service References\PowerHouseWS\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>

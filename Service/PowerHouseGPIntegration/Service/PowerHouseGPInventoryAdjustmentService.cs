@@ -146,6 +146,7 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Service
                         econnect.CreateEntity(Utility.GetEconnectConnectionString(AppSettings.GPConnectionString), itemSitesXML);
                     }
                     var result = econnect.CreateTransactionEntity(Utility.GetEconnectConnectionString(AppSettings.GPConnectionString), sDocumentXml);
+
                     //update power house flags
                     if (AppSettings.SendShipResponse)
                     {
@@ -160,6 +161,50 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Service
                                 }
                         };
                         serviceProxy.sendInvAdjResponses(sessionId, invAdjResponses);
+                    }
+
+                    if (AppSettings.AutoPostInventoryTrx)
+                    {
+                        //call post
+                        if (!string.IsNullOrWhiteSpace(_powerhouseWsSetting.BSPGPWSURL))
+                        {
+                            var client = new RestClient(_powerhouseWsSetting.BSPGPWSURL)
+                            {
+                                Timeout = 600000
+                            };
+
+                            var resource = $"Tenants(DefaultTenant)/Companies(" + AppSettings.GPCompanyName + ")/BusinessSolutionPartners/Inventory/Transactions({Type};{Number})";
+                            var request = new RestRequest(resource, Method.POST);
+
+                            //Temporary only for testing
+                            //ServicePointManager.ServerCertificateValidationCallback = delegate (object s, System.Security.Cryptography.X509Certificates.X509Certificate certificate,
+                                //System.Security.Cryptography.X509Certificates.X509Chain chain, System.Net.Security.SslPolicyErrors sslPolicyErrors) { return true; };
+
+                            if (!AppSettings.GPSBAUseDefaultCredentials)
+                            {
+                                client.Authenticator = new NtlmAuthenticator(
+                                    new NetworkCredential(
+                                        AppSettings.GPSBAUserId,
+                                        AppSettings.GPSBAPassword,
+                                        AppSettings.GPSBADomain));
+                            }
+                            else
+                            {
+                                request.UseDefaultCredentials = true;
+                            }
+
+                            request.AddHeader("GP-Custom-Action", "POST");
+                            request.AddUrlSegment("Type", (int)trxtype);
+                            request.AddUrlSegment("Number", invTrx.ifSeqNum.Value.ToString());
+
+                            var response = client.Execute(request);
+                            if (!response.IsSuccessful)
+                            {
+                                //log error
+                                var errorMsg = $"GP Service Error:\r\n\r\nResource: {request.Resource} \r\n\r\nParameters: \r\n\r\n{string.Join("\r\n", request.Parameters)} \r\n\r\nResponse Content: \r\n\r\n{response.Content}";
+                                EventLogUtility.LogWarningMessage(errorMsg);
+                            }
+                        }
                     }                    
                 }
             }

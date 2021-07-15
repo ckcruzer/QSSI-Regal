@@ -77,6 +77,12 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.eConnectObjects
             if (sopHeader == null)
                 throw new Exception("Record does not exist. " + _shipment.orderId);
 
+            // Add Code to check customer Batch 
+            string batchNumber = _powerhouseWsSetting.BSPSOPFulfillmentBatchID;
+            CustomerBatch customerBatch = DynamicsGpDB.GetCustomerBatch(sopHeader.CUSTNMBR);
+            if(customerBatch != null && !string.IsNullOrWhiteSpace(customerBatch.BACHNUMB))
+                batchNumber = customerBatch.BACHNUMB;
+
             
             var header = new taSopHdrIvcInsert()
             {
@@ -115,7 +121,8 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.eConnectObjects
                 SALSTERR = sopHeader.SALSTERR,
                 SLPRSNID = sopHeader.SLPRSNID,
                 UPSZONE = sopHeader.UPSZONE,
-                BACHNUMB = _powerhouseWsSetting.BSPSOPFulfillmentBatchID, // Transfer to new batch
+                //BACHNUMB = _powerhouseWsSetting.BSPSOPFulfillmentBatchID, // Transfer to new batch // Old code. Replaced with new logic for customer batch mapping
+                BACHNUMB = batchNumber, // Transfer to new batch
                 PRBTADCD = sopHeader.PRBTADCD,
                 PRSTADCD = sopHeader.PRSTADCD,
                 PYMTRMID = sopHeader.PYMTRMID,
