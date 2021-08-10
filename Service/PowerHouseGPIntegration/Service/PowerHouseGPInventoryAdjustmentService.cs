@@ -87,20 +87,16 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Service
                         {
                             switch (ivTran.ifTranCode)
                             {
-                                case "BH-CONT":
-                                case "CHG-DEC":
-                                case "CY-DEC":
                                 case "DEC":
-                                case "DEC-AUTO":
-                                case "CHG-INC":
-                                case "CY-INC":
+                                case "CY-TOT-INC":
                                 case "INC":
-                                case "INC-AUTO":
+                                case "BH-CONT":
+                                case "CY-TOT-DEC":
+                                case "CHG-DEC":
+                                case "CHG-INC":                                                                                                
                                     //inventory adjustment
                                     ProcessInventoryTransaction(serviceProxy, sessionId, new IVInventoryTransaction(trxBatch, ivTran, _powerhouseWsSetting), ivTran, GPIvTrxType.Adjustment);
                                     break;
-                                case "HOLD-PLACE":
-                                case "HOLD-REL":
                                 default:
                                     break;
                             }
