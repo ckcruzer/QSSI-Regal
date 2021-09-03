@@ -20,6 +20,7 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Data
         private static string SQL_GET_SOP_HEADER = "zDP_SOP10100SS_1";
         private static string SQL_GET_SOP_LINE = "zDP_SOP10200SS_1";
         private static string SQL_UPDATE_EDI = "BSP_SopUpdateEDIInsert";
+        private static string SQL_UPDATE_EDI_ESI40500 = "BSP_SopUpdateEDIInsert_ESI40500";
         private static string SQL_UPDATE_ASN_MANAGER = "sp_UpdateASNManager";
         private static string SQL_FULFILLMENT_POST = "BSP_SopFulfillmentPost";
         private static string SQL_GET_CUSTOMER = "zDP_RM00101SS_1";
@@ -70,6 +71,14 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Data
         private static string PARM_ERROR_STRING = "@oErrString";
 
         private static string PARM_CUSTNMBR = "@CUSTNMBR";
+
+        private static string PARM_ESIPKCID = "@I_ESIPKCID";
+        private static string PARM_ESICONTY = "@I_ESICONTY";
+        private static string PARM_ESIUOFM1 = "@I_ESIUOFM1";
+        private static string PARM_ESICONHT = "@I_ESICONHT";
+        private static string PARM_ESICONWD = "@I_ESICONWD";
+        private static string PARM_ESICONLN = "@I_ESICONLN";
+        private static string PARM_ESICONCF = "@I_ESICONCF";
 
         #endregion
 
@@ -244,6 +253,25 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Data
 
                     var dr = SqlHelper.ExecuteNonQuery(AppSettings.GPConnectionString, CommandType.StoredProcedure, SQL_UPDATE_EDI, parameters);
                 }
+
+                SqlParameter[] parametersESI40500 = {
+                                            new SqlParameter(PARM_ESIPKCID, SqlDbType.Char, 11),
+                                            new SqlParameter(PARM_ESICONTY, SqlDbType.Char, 11),
+                                            new SqlParameter(PARM_ESIUOFM1, SqlDbType.Char, 3),
+                                            new SqlParameter(PARM_ESICONHT, SqlDbType.Decimal),
+                                            new SqlParameter(PARM_ESICONWD, SqlDbType.Decimal),
+                                            new SqlParameter(PARM_ESICONLN, SqlDbType.Decimal),
+                                            new SqlParameter(PARM_ESICONCF, SqlDbType.Decimal)
+                                        };
+                parametersESI40500[0].Value = ""; // Pending
+                parametersESI40500[1].Value = "CTN";
+                parametersESI40500[2].Value = "EA";
+                parametersESI40500[3].Value = carton.stdCartonHeight;
+                parametersESI40500[4].Value = carton.stdCartonWidth;
+                parametersESI40500[5].Value = carton.stdCartonDepth;
+                parametersESI40500[6].Value = 0d;
+
+                var drESI40500 = SqlHelper.ExecuteNonQuery(AppSettings.GPConnectionString, CommandType.StoredProcedure, SQL_UPDATE_EDI_ESI40500, parametersESI40500);
             }
 
             return DynamicsGpDB.UpdateASNManager(string.IsNullOrEmpty(shipment.truckId) ? shipment.orderId : shipment.truckId) == 0;
