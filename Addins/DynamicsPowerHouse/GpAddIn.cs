@@ -113,6 +113,11 @@ namespace BSP.DynamicsGP.PowerHouse
                     throw new Exception("Invalid Order Batch");
                 }
 
+                //Added filtering of FEDEX as per Margie's request
+                if (salesOrder.ShippingMethod.Id == "7005" && string.IsNullOrWhiteSpace(salesOrder.Customer.Comment1))
+                {
+                    throw new Exception("Shipping Method is FEDEX. Order is not allowed to be sent to PH.");
+                }
 
                 var responses = SendSalesOrder(salesOrder);
                 if (responses != null)
@@ -517,6 +522,9 @@ namespace BSP.DynamicsGP.PowerHouse
                 else
                     rtn = 2; // Added this so Dex will catch this and won't display any prompt. 
             }
+            else
+                rtn = 2; // Added this so Dex will catch this and won't display any prompt. 
+
             return rtn;
         }
 

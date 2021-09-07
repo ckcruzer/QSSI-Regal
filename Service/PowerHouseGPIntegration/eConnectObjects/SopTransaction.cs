@@ -207,7 +207,9 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.eConnectObjects
                             LOCNCODE = sopLineItem.LOCNCODE, // Just use the same as the one from the original order
                             ITEMNMBR = detail.itemId,
                             UNITPRCE = Convert.ToDecimal(detail.olCust1),
-                            QUANTITY = sopLineItem.QUANTITY,
+                            //QUANTITY = sopLineItem.QUANTITY,
+                            QUANTITY = detail.piecesToMove.HasValue ? Convert.ToDecimal(detail.piecesToMove.Value) / GetQtyInBaseUnitOfMeasure(detail.olCust10) : 0, //RIC: Added for partial shipments
+                            TOTALQTY = sopLineItem.QUANTITY, //RIC: Added for partial shipments
                             //UNITCOST = sopLineItem.UNITCOST,
                             //UNITCOSTSpecified = sopLineItem.UNITCOST > 0 ? true : false,
                             COMMNTID = detail.olCust16,
@@ -268,7 +270,9 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.eConnectObjects
                     }
                     else
                     {
-                        item.QTYFULFI += detail.piecesToMove.HasValue ? Convert.ToDecimal(detail.piecesToMove.Value) / GetQtyInBaseUnitOfMeasure(detail.olCust10) : 0;                        
+                        item.QTYFULFI += detail.piecesToMove.HasValue ? Convert.ToDecimal(detail.piecesToMove.Value) / GetQtyInBaseUnitOfMeasure(detail.olCust10) : 0;
+                        //Added to fix the unequal QTYFULFIL and QUANTITY
+                        item.QUANTITY += detail.piecesToMove.HasValue ? Convert.ToDecimal(detail.piecesToMove.Value) / GetQtyInBaseUnitOfMeasure(detail.olCust10) : 0;
                     }
                 }
             }
