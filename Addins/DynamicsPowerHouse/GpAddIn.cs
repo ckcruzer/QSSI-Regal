@@ -113,7 +113,7 @@ namespace BSP.DynamicsGP.PowerHouse
                     throw new Exception("Invalid Order Batch");
                 }
 
-                //Double check again to make sure that the batch belongs to sales order batch in the setup
+                //Added filtering of FEDEX as per Margie's request
                 if (salesOrder.ShippingMethod.Id == "7005" && string.IsNullOrWhiteSpace(salesOrder.Customer.Comment1))
                 {
                     throw new Exception("Shipping Method is FEDEX. Order is not allowed to be sent to PH.");
