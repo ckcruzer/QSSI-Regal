@@ -531,7 +531,7 @@ namespace BSP.DynamicsGP.PowerHouse
                 return customer;
             }
 
-        private static CustomerItemXref GetCustomerItemXref(string itemNumber, string customerNumber)
+        public static CustomerItemXref GetCustomerItemXref(string itemNumber, string customerNumber)
         {
             TableError lastError;
 

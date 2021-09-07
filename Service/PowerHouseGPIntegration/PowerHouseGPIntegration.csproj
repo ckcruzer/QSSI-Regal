@@ -130,6 +130,7 @@
     <Compile Include="Extensions\eConnectExtensions.cs" />
     <Compile Include="Extensions\ExceptionExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Model\CustomerBatchMapping.cs" />
     <Compile Include="Model\ItemSite.cs" />
     <Compile Include="Model\PowerhouseWsSetting.cs" />
     <Compile Include="Model\ReceiptTransaction.cs" />

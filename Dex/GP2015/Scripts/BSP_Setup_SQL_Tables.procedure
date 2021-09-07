@@ -28,6 +28,7 @@ if 'SQL Server' of globals > 0 then
 		call BSP_Create_Table, \"BSP_Powerhouse_Receiving_LINE\";
 		call BSP_Create_Table, \"BSP_Powerhouse_Receiving_Transfer\";
 		call BSP_Create_Table, \"BSP_Powerhouse_PO_Transfer\";
+		call BSP_Create_Table, \"BSP_Powerhouse_Cust_Batch_Mapping\";
 		
 		
 		{Send warning to user that tables and granting permissions are finished}

@@ -1,0 +1,61 @@
+Table	"BSP_Powerhouse_Cust_Batch_Mapping"
+{
+	AllowActiveLocking	"false"
+	DatabaseType	"SQL"
+	DexRowTimestamp	"false"
+	DisplayName	"BSP Powerhouse Cust Batch Mapping"
+	FourByteHeader	"true"
+	PhysicalName	"BSP_Powerhouse_CustBatch"
+	Restriction	""
+	Series	"Sales"
+	TableType	"Standard"
+	~Fields
+	{
+		TableField	"Batch Number"		
+		{
+			Encrypt	"false"
+			Field	"Batch Number"
+			Position	"1"
+		}
+		TableField	"Customer Number"		
+		{
+			Encrypt	"false"
+			Field	"Customer Number"
+			Position	"0"
+		}
+	}
+	~Keys
+	{
+		Key	"BSP_Powerhouse_Cust_Batch_Mapping"		
+		{
+			Clustered	"false"
+			Compress	"false"
+			CreateIndex	"true"
+			DisableDeletes	"false"
+			DisableFirsts	"false"
+			DisableGets	"false"
+			DisableInserts	"false"
+			DisableLasts	"false"
+			DisableNexts	"false"
+			Duplicates	"false"
+			Modifiable	"true"
+			Position	"0"
+			Primary	"true"
+			Segments
+			{
+				KeySegment	"Customer Number"				
+				{
+					Component	""
+					Descending	"false"
+					IgnoreCase	"true"
+					NoCombining	"false"
+					NoLengthByte	"false"
+					Position	"0"
+				}
+			}
+		}
+	}
+	~Relationships
+	{
+	}
+}

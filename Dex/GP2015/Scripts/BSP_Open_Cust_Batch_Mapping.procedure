@@ -1,0 +1,21 @@
+Procedure	"BSP_Open_Cust_Batch_Mapping"
+{
+	Core	"Sales"
+	Documentation	""
+	Script	"{Check if Customer Number is empty}
+if empty('Customer Number' of window RM_Customer_Maintenance of form RM_Customer_Maintenance) then
+	warning \"Please select a customer.\";
+	abort script;
+end if;
+
+open form BSP_Powerhouse_Cust_Batch_Mapping;
+set 'Customer Number' of window BSP_Powerhouse_Cust_Batch_Mapping of form BSP_Powerhouse_Cust_Batch_Mapping to 'Customer Number' of window RM_Customer_Maintenance of form RM_Customer_Maintenance;
+run script 'Display Existing Record' of window BSP_Powerhouse_Cust_Batch_Mapping of form BSP_Powerhouse_Cust_Batch_Mapping;	
+"
+	ServiceAction	""
+	ServiceCustomAciton	""
+	ServiceEnabled	"FALSE"
+	ServiceRawRequest	"FALSE"
+	ServiceUriTemplate	""
+	UserProperties	""
+}

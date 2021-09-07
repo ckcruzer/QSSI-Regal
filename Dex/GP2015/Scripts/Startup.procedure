@@ -79,6 +79,12 @@ end if;
 l_result = Trigger_RegisterForm(form IV_Item_Maintenance, \"Powerhouse\", \"S\", script BSP_Open_IV_Item_Maintenance_Integration);
 if l_result <> SY_NOERR then
 	warning \"Form trigger BSP_Open_IV_Item_Maintenance_Integration registration failed.\";
+end if;
+
+{20210310 RP: Added as requested by REGAL}
+l_result = Trigger_RegisterForm(form RM_Customer_Maintenance, \"Batch Mapping\", \"B\", script BSP_Open_Cust_Batch_Mapping);
+if l_result <> SY_NOERR then
+	warning \"Form trigger BSP_Open_Cust_Batch_Mapping registration failed.\";
 end if;"
 	ServiceAction	""
 	ServiceCustomAciton	""

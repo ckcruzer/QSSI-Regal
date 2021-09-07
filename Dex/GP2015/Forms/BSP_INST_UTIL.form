@@ -495,9 +495,9 @@ local long status;
 local long progress;
 local integer tableCount;
 local integer i;
-local string tables[9];
+local string tables[10];
 
-tableCount = 9;
+tableCount = 10;
 
 {will be 0 in test mode otherwise as specified in .set file}
 dict_id = Runtime_GetCurrentProductID();
@@ -513,6 +513,7 @@ tables[6] = \"BSP_Powerhouse_Receiving_Transfer\";
 tables[7] = \"BSP_Powerhouse_Receiving_HDR\";
 tables[8] = \"BSP_Powerhouse_Receiving_LINE\";
 tables[9] = \"BSP_Powerhouse_PO_Transfer\";
+tables[10] = \"BSP_Powerhouse_Cust_Batch_Mapping\";
 
 for i = 1 to tableCount do
 	increment '(L) Progress' by  progress;
