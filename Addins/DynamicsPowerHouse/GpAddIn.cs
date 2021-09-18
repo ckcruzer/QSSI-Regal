@@ -116,7 +116,7 @@ namespace BSP.DynamicsGP.PowerHouse
                 //Added filtering of FEDEX as per Margie's request
                 if (salesOrder.ShippingMethod.Id == "7005" && string.IsNullOrWhiteSpace(salesOrder.Customer.Comment1))
                 {
-                    throw new Exception("Shipping Method is FEDEX. Order is not allowed to be sent to PH.");
+                    throw new Exception("Shipping Method is FEDEX 3rd Party. Order is not allowed to be sent to PH.");
                 }
 
                 var responses = SendSalesOrder(salesOrder);
