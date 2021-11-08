@@ -159,7 +159,7 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Service
                         serviceProxy.sendInvAdjResponses(sessionId, invAdjResponses);
                     }
 
-                    if (AppSettings.AutoPostInventoryTrx)
+                    if (AppSettings.AutoPostInventoryTrx && trxtype == GPIvTrxType.Adjustment)
                     {
                         //call post
                         if (!string.IsNullOrWhiteSpace(_powerhouseWsSetting.BSPGPWSURL))
