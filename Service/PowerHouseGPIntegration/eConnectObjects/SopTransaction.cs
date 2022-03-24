@@ -220,7 +220,8 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.eConnectObjects
                             QTYDMGED = sopLineItem.QTYDMGED,
                             LNITMSEQ = lnitmseq,
                             DROPSHIP = sopLineItem.DROPSHIP,
-                            QTYTBAOR = sopLineItem.QTYTBAOR,
+                            //QTYTBAOR = sopLineItem.QTYTBAOR,
+                            QTYTBAOR = sopLineItem.QUANTITY - (detail.piecesToMove.HasValue ? Convert.ToDecimal(detail.piecesToMove.Value) / GetQtyInBaseUnitOfMeasure(detail.olCust10) : 0),
                             SALSTERR = sopLineItem.SALSTERR,
                             SLPRSNID = sopLineItem.SLPRSNID,
                             ITMTSHID = sopLineItem.ITMTSHID,
@@ -252,7 +253,8 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.eConnectObjects
                             UOFM = detail.olCust5?.ToString(),
                             UpdateIfExists = 1,
                             CURNCYID = Configuration.AppSettings.DefaultCurrency,
-                            XTNDPRCE = sopLineItem.XTNDPRCE
+                            XTNDPRCE = sopLineItem.XTNDPRCE,
+                            ALLOCATE = 1
                         };
 
                         if (sopLineItem.MRKDNTYP == 1)
@@ -273,6 +275,7 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.eConnectObjects
                         item.QTYFULFI += detail.piecesToMove.HasValue ? Convert.ToDecimal(detail.piecesToMove.Value) / GetQtyInBaseUnitOfMeasure(detail.olCust10) : 0;
                         //Added to fix the unequal QTYFULFIL and QUANTITY
                         item.QUANTITY += detail.piecesToMove.HasValue ? Convert.ToDecimal(detail.piecesToMove.Value) / GetQtyInBaseUnitOfMeasure(detail.olCust10) : 0;
+                        item.QTYTBAOR -= detail.piecesToMove.HasValue ? Convert.ToDecimal(detail.piecesToMove.Value) / GetQtyInBaseUnitOfMeasure(detail.olCust10) : 0;
                     }
                 }
             }
@@ -316,7 +319,8 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.eConnectObjects
                                 LOCNCODE = componentItem.LOCNCODE, // Just use the same as the one from the original order
                                 ITEMNMBR = detail.itemId,
                                 QUANTITY = componentItem.QUANTITY,
-                                QTYTBAOR = componentItem.QTYTBAOR,
+                                //QTYTBAOR = componentItem.QTYTBAOR,
+                                QTYTBAOR = componentItem.QUANTITY - (detail.piecesToMove.HasValue ? Convert.ToDecimal(detail.piecesToMove.Value) / GetQtyInBaseUnitOfMeasure(detail.olCust10) : 0),
                                 QTYCANCE = componentItem.QTYCANCE,
                                 QTYFULFI = detail.piecesToMove.HasValue ? Convert.ToDecimal(detail.piecesToMove.Value) / GetQtyInBaseUnitOfMeasure(detail.olCust10) : 0,
                                 QTYFULFISpecified = true,
@@ -334,6 +338,7 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.eConnectObjects
                         else
                         {
                             item.QTYFULFI += detail.piecesToMove.HasValue ? Convert.ToDecimal(detail.piecesToMove.Value) / GetQtyInBaseUnitOfMeasure(detail.olCust10) : 0;
+                            item.QTYTBAOR -= detail.piecesToMove.HasValue ? Convert.ToDecimal(detail.piecesToMove.Value) / GetQtyInBaseUnitOfMeasure(detail.olCust10) : 0;
                         }
                     }
                 }
