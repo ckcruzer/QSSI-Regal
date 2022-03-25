@@ -237,7 +237,8 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Data
                     parameters[9].Value = carton.stdActWeight;
                     parameters[10].Value = shipment.totalWeight;
                     parameters[11].Value = shipment.dateShipped;
-                    parameters[12].Value = string.IsNullOrEmpty(shipment.truckId) ? shipment.orderId : shipment.truckId;
+                    //parameters[12].Value = string.IsNullOrEmpty(shipment.truckId) ? shipment.orderId : shipment.truckId; 
+                    parameters[12].Value = shipment.orderId; // Because of the issue of the ASN not generating. Replaced with just the order id.
                     parameters[13].Value = carton.shipMethod;
                     parameters[14].Value = shipment.bolId;
                     parameters[15].Value = carton.packageTraceId;
