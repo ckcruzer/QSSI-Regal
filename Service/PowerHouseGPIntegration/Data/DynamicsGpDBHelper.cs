@@ -276,7 +276,7 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Data
                 var drESI40500 = SqlHelper.ExecuteNonQuery(AppSettings.GPConnectionString, CommandType.StoredProcedure, SQL_UPDATE_EDI_ESI40500, parametersESI40500);
             }
 
-            return DynamicsGpDB.UpdateASNManager(string.IsNullOrEmpty(shipment.truckId) ? shipment.orderId : shipment.truckId) == 0;
+            return DynamicsGpDB.UpdateASNManager(shipment.orderId) == 0;
 
         }
 
