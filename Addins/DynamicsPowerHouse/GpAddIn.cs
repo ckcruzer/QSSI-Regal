@@ -82,8 +82,7 @@ namespace BSP.DynamicsGP.PowerHouse
             _sopNumber = e.inParam2;
 
             try
-            {
-
+            {                
                 _powerhouseWsSettings = DataAccessHelper.GetPowerhouseWsSettings();
                 if (_powerhouseWsSettings == null)
                 {
@@ -254,7 +253,7 @@ namespace BSP.DynamicsGP.PowerHouse
             {
                 if (line.ShouldBeSentToPowerHouse)
                 {
-                    var ol = GetOrderLine(line, order.pickCompleteFlag);
+                    var ol = GetOrderLine(line, order.pickCompleteFlag, salesOrder.MasterNumber);
                     orderLines.Add(ol);
 
                     //update order total
@@ -280,7 +279,7 @@ namespace BSP.DynamicsGP.PowerHouse
             return orderLines.ToArray();
         }
 
-        private OrderLine GetOrderLine(SalesTransactionLine line, string pickCompleteFlag)
+        private OrderLine GetOrderLine(SalesTransactionLine line, string pickCompleteFlag, int masterNumber)
         {
             decimal qtyToPick = _powerhouseWsSettings.SOQtyToUse == 1 ? line.Qty - (line.QtyToBackOrder + line.QtyCancelled) : line.QtyAllocated;
 
@@ -300,7 +299,7 @@ namespace BSP.DynamicsGP.PowerHouse
                 hostId1 = line.ComponentSequence.ToString(),
                 itemId = line.ItemNumber?.SanitizeXMLString(),
                 custItemId = line.CustomerItem?.CustomerItemNumber?.SanitizeXMLString(),
-                orderLine = line.LineItemSequence + (line.ComponentSequence / 16384),
+                orderLine = line.LineItemSequence + Convert.ToInt32(Math.Ceiling((Decimal)line.ComponentSequence / 16384)),
                 orderLineSpecified = true,
                 piecesOrdered = Convert.ToDouble((line.Qty - line.QtyCancelled) * line.QtyInBaseUOfM),
                 piecesOrderedSpecified = true,
@@ -313,7 +312,8 @@ namespace BSP.DynamicsGP.PowerHouse
                 olCust1 = line.UnitPrice.ToString(),
                 olCust2 = line.LocationCode?.SanitizeXMLString(),
                 olCust3 = line.ExtendedPrice.ToString(),
-                olCust4 = line.LineComment?.CommentText?.SanitizeXMLString(),
+                //olCust4 = line.LineComment?.CommentText?.SanitizeXMLString(), // RIC 20230206: Replaced with EDI
+                olCust4 = DataAccessHelper.GetESI11004Data(masterNumber, line.LineItemSequence),
                 olCust5 = line.UOfM,
                 olCust6 = line.CustomerItem?.CustomerItemNumber?.SanitizeXMLString(),
                 olCust7 = line.CustomerItem != null ? line.CustomerItem.CustomerItemDescription?.SanitizeXMLString() : string.Empty,

@@ -316,3 +316,6 @@ __pycache__/
 /GPWEB-TEST.RDP
 /Regal-GP2015 GP2Admin.RDP
 /Regal-GPWEB GP2Admin.RDP
+/Service/PowerHouseGPIntegration/Service References/PowerHouseWS/PHWebServices1.wsdl
+/SQL Objects/BSP_GET_ESI11004_DATA.sql
+/Regal-Margie.RDP

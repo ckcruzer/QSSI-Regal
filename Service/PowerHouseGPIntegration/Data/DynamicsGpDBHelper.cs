@@ -230,7 +230,8 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Data
                     parameters[3].Value = detail.workDetSeqNum;
                     parameters[4].Value = carton.cartonIdFrom;
                     //parameters[5].Value = string.Empty;
-                    parameters[5].Value = detail.palletIdFrom;
+                    //parameters[5].Value = detail.palletIdFrom;
+                    parameters[5].Value = carton.shippingScreenId == "w_submit_truck" ? detail.shipLabelId : string.Empty; // Replaced
                     parameters[6].Value = detail.itemId;
                     parameters[7].Value = detail.piecesToMove;
                     parameters[8].Value = 0;
