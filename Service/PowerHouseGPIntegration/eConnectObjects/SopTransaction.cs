@@ -80,7 +80,8 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.eConnectObjects
             // Add Code to check customer Batch 
             string batchNumber = _powerhouseWsSetting.BSPSOPFulfillmentBatchID;
             CustomerBatch customerBatch = DynamicsGpDB.GetCustomerBatch(sopHeader.CUSTNMBR);
-            if(customerBatch != null && !string.IsNullOrWhiteSpace(customerBatch.BACHNUMB))
+            BSPRMCustomer bSPRMCustomer = DynamicsGpDB.GetCustomerAdditional(sopHeader.CUSTNMBR);
+            if (customerBatch != null && !string.IsNullOrWhiteSpace(customerBatch.BACHNUMB))
                 batchNumber = customerBatch.BACHNUMB;
 
             
@@ -96,7 +97,7 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.eConnectObjects
                 SHIPMTHD = _shipment.shipMethod,
                 LOCNCODE = sopHeader.LOCNCODE,
                 DOCDATE = sopHeader.DOCDATE.GpFormattedDate(),
-                FREIGHT = _shipment.frtCharge.HasValue ? Convert.ToDecimal(_shipment?.frtCharge) : sopHeader.FRTAMNT,
+                FREIGHT = bSPRMCustomer.BSP_SuppressPHFreight == 0 ? (_shipment.frtCharge.HasValue ? Convert.ToDecimal(_shipment?.frtCharge) : sopHeader.FRTAMNT) : sopHeader.FRTAMNT,
                 MISCAMNT = sopHeader.MISCAMNT,
                 //TRDISAMT = sopHeader.TRDISAMT,
                 //TRDISAMTSpecified = sopHeader.TRDISAMT > 0 ? true : false,
