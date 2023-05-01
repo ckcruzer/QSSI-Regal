@@ -25,6 +25,7 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Data
         private static string SQL_FULFILLMENT_POST = "BSP_SopFulfillmentPost";
         private static string SQL_GET_CUSTOMER = "zDP_RM00101SS_1";
         private static string SQL_GET_CUSTOMER_BATCH = "zDP_BSP_Powerhouse_CustBaSS_1";
+        private static string SQL_GET_CUSTOMER_ADDITIONAL = "zDP_BSP_RM_Customer_MSTRSS_1";
 
         #endregion
 
@@ -185,6 +186,23 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Data
             return null;
         }
 
+        public static BSPRMCustomer GetCustomerAdditional(string customerNumber)
+        {
+            SqlParameter[] parameters = {
+                                            new SqlParameter(PARM_CUSTNMBR, SqlDbType.Char, 15)
+                                        };
+            parameters[0].Value = customerNumber;
+
+            using (var dr = SqlHelper.ExecuteReader(AppSettings.GPConnectionString, CommandType.StoredProcedure, SQL_GET_CUSTOMER_ADDITIONAL, parameters))
+            {
+                if (dr.HasRows)
+                {
+                    return TrimStrings(MapDataToBusinessEntityCollection<BSPRMCustomer>(dr).FirstOrDefault());
+                }
+            }
+            return null;
+        }
+
         public static bool UpdateEDI(short sopType, Shipment shipment)
         {
 
@@ -230,7 +248,8 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.Data
                     parameters[3].Value = detail.workDetSeqNum;
                     parameters[4].Value = carton.cartonIdFrom;
                     //parameters[5].Value = string.Empty;
-                    parameters[5].Value = detail.palletIdFrom;
+                    //parameters[5].Value = detail.palletIdFrom;
+                    parameters[5].Value = carton.shippingScreenId == "w_submit_truck" ? detail.shipLabelId : string.Empty; // Replaced
                     parameters[6].Value = detail.itemId;
                     parameters[7].Value = detail.piecesToMove;
                     parameters[8].Value = 0;

@@ -6,11 +6,27 @@ using Microsoft.Dexterity.Bridge;
 using Microsoft.Dexterity.Applications;
 using Microsoft.Dexterity.Applications.DynamicsDictionary;
 using BSP.DynamicsGP.PowerHouse.Extensions;
+using BSP.DynamicsGP.PowerHouse.Configuration;
+using System.Data.SqlClient;
+using System.Data;
+using System.Reflection;
 
 namespace BSP.DynamicsGP.PowerHouse
 {
     public static class DataAccessHelper
     {
+        #region SQL statements
+
+        private static string SQL_BSP_GET_ESI11004_DATA = "BSP_GET_ESI11004_DATA";
+
+        #endregion
+
+        #region SQL Parameters        
+
+        private static string PARM_MSTRNUMB = "@pMSTRNUMB";
+        private static string PARM_LNITMSEQ = "@pLNITMSEQ";
+
+        #endregion
 
         public static PowerhouseWsSetting GetPowerhouseWsSettings()
         {
@@ -227,6 +243,10 @@ namespace BSP.DynamicsGP.PowerHouse
                 };
 
                 salesTrx.BillToAddress = GetCustomerAddress(SOPHeaderWorkTable.CustomerNumber, SOPHeaderWorkTable.PrimaryBilltoAddressCode.Value);
+
+                //Ric 20230206: Added for EDI Requirement
+                salesTrx.MasterNumber = SOPHeaderWorkTable.MasterNumber.Value;
+
                 // Specify the range for the table
                 // Start of the range
                 SOPLineWorkTable.Clear();
@@ -811,6 +831,31 @@ namespace BSP.DynamicsGP.PowerHouse
             }
 
 
+        }
+
+        public static string GetESI11004Data(int masterNumber, int lineItemSequence)
+        {
+            string rtn = string.Empty;
+
+            SqlParameter[] parameters = {
+                                            new SqlParameter(PARM_MSTRNUMB, SqlDbType.Int),
+                                            new SqlParameter(PARM_LNITMSEQ, SqlDbType.Int)
+                                        };
+            parameters[0].Value = masterNumber;
+            parameters[1].Value = lineItemSequence;
+
+
+            using (var dr = Data.SqlHelper.ExecuteReader(AppSettings.GPConnectionString, CommandType.StoredProcedure, SQL_BSP_GET_ESI11004_DATA, parameters))
+            {
+                if (dr.HasRows)
+                {
+                    while (dr.Read())
+                    {
+                        rtn = TrimStrings(dr["ESISACAM_1"].ToString());
+                    }                    
+                }
+            }
+            return rtn;
         }
 
         #endregion
@@ -1555,6 +1600,30 @@ namespace BSP.DynamicsGP.PowerHouse
                 // Close the table
                 PoTransferTable.Close();
             }
+        }
+
+        public static T TrimStrings<T>(T instance)
+        {
+            var props = instance.GetType()
+                    .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                    // Ignore non-string properties
+                    .Where(prop => prop.PropertyType == typeof(string))
+                    // Ignore indexers
+                    .Where(prop => prop.GetIndexParameters().Length == 0)
+                    // Must be both readable and writable
+                    .Where(prop => prop.CanWrite && prop.CanRead);
+
+            foreach (PropertyInfo prop in props)
+            {
+                string value = (string)prop.GetValue(instance, null);
+                if (value != null)
+                {
+                    value = value.Trim();
+                    prop.SetValue(instance, value, null);
+                }
+            }
+
+            return instance;
         }
 
         #endregion

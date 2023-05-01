@@ -97,6 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\DynamicsGpDBHelper.cs" />
+    <Compile Include="Domain\BSPRMCustomer.cs" />
     <Compile Include="Domain\CustomerBatch.cs" />
     <Compile Include="Domain\RM00101_DTO.cs" />
     <Compile Include="Domain\SOP10100_DTO.cs" />

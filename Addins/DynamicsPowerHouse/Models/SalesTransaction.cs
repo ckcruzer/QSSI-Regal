@@ -47,5 +47,7 @@ namespace BSP.DynamicsGP.PowerHouse.Models
         public string TaxExempt2 { get; set; }
 
         public Customer Customer { get; set; }
+
+        public int MasterNumber { get; set; }
     }
 }

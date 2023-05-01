@@ -13,6 +13,8 @@ namespace BSP.DynamicsGP.PowerHouse.Configuration
     {
         private static readonly NameValueCollection _appSettings = ConfigurationManager.AppSettings;
 
+        public static string GPConnectionString { get { return System.Configuration.ConfigurationManager.ConnectionStrings["GPConnectionString"].ConnectionString; } }
+
         public static string FromEmailAddress { get { return GetAppSetting("FromEmailAddress", string.Empty); } }
 
         public static string ToEmailAddress { get { return GetAppSetting("ToEmailAddress", string.Empty); } }
