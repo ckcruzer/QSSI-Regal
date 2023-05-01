@@ -84,7 +84,13 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.eConnectObjects
             if (customerBatch != null && !string.IsNullOrWhiteSpace(customerBatch.BACHNUMB))
                 batchNumber = customerBatch.BACHNUMB;
 
-            
+            decimal headerFreight = 0;
+            if (bSPRMCustomer != null && bSPRMCustomer.BSP_SuppressPHFreight == 1)
+                headerFreight = sopHeader.FRTAMNT;
+            else
+                headerFreight = _shipment.frtCharge.HasValue ? Convert.ToDecimal(_shipment?.frtCharge) : sopHeader.FRTAMNT;
+
+
             var header = new taSopHdrIvcInsert()
             {
                 SOPTYPE = (short)GpSopType.Order,
@@ -97,7 +103,7 @@ namespace BSP.PowerHouse.DynamicsGP.Integration.eConnectObjects
                 SHIPMTHD = _shipment.shipMethod,
                 LOCNCODE = sopHeader.LOCNCODE,
                 DOCDATE = sopHeader.DOCDATE.GpFormattedDate(),
-                FREIGHT = bSPRMCustomer.BSP_SuppressPHFreight == 0 ? (_shipment.frtCharge.HasValue ? Convert.ToDecimal(_shipment?.frtCharge) : sopHeader.FRTAMNT) : sopHeader.FRTAMNT,
+                FREIGHT = headerFreight,
                 MISCAMNT = sopHeader.MISCAMNT,
                 //TRDISAMT = sopHeader.TRDISAMT,
                 //TRDISAMTSpecified = sopHeader.TRDISAMT > 0 ? true : false,
