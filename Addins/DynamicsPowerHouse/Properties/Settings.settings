@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="BSP_DynamicsGP_PowerHouse_PowerhouseWS_PHWebServices" Type="(Web Service URL)" Scope="Application">
-      <Value Profile="(Default)">http://18.224.66.250:8083/PHWebServices/services/PHWebServices.PHWebServicesHttpSoap11Endpoint/</Value>
+      <Value Profile="(Default)">http://regal.qssi-wms.com:8083/PHWebServices/services/PHWebServices.PHWebServicesHttpSoap11Endpoint/</Value>
     </Setting>
   </Settings>
 </SettingsFile>

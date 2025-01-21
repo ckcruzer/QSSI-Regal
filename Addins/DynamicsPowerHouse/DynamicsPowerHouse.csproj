@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\..\Program Files %28x86%29\Microsoft Dynamics\GP2015\AddIns\</OutputPath>
+    <OutputPath>..\..\..\..\Program Files %28x86%29\Microsoft Dynamics\GP2018\AddIns\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -36,10 +36,16 @@
     <Prefer32Bit>false</Prefer32Bit>
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>MyKey.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Application.BusinessSolutionPartners, Version=14.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics\GP2015 VS Tools SDK\Application.BusinessSolutionPartners.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files (x86)\Microsoft Dynamics\GPDevel\AddIns\Application.BusinessSolutionPartners.dll</HintPath>
     </Reference>
     <Reference Include="Application.Dynamics">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics\GP2015 VS Tools SDK\Application.Dynamics.dll</HintPath>
@@ -52,6 +58,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -104,6 +111,7 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="MyKey.snk" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -281,10 +289,10 @@
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
-    <WebReferenceUrl Include="http://18.224.66.250:8083/PHWebServices/services/PHWebServices%3fwsdl">
+    <WebReferenceUrl Include="http://regal.qssi-wms.com:8083/PHWebServices/services/PHWebServices%3fwsdl">
       <UrlBehavior>Dynamic</UrlBehavior>
       <RelPath>Web References\PowerhouseWS\</RelPath>
-      <UpdateFromURL>http://18.224.66.250:8083/PHWebServices/services/PHWebServices%3fwsdl</UpdateFromURL>
+      <UpdateFromURL>http://regal.qssi-wms.com:8083/PHWebServices/services/PHWebServices%3fwsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
@@ -293,7 +301,6 @@
       <CachedSettingsPropName>BSP_DynamicsGP_PowerHouse_PowerhouseWS_PHWebServices</CachedSettingsPropName>
     </WebReferenceUrl>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

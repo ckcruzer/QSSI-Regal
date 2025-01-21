@@ -12,7 +12,7 @@ namespace BSP.DynamicsGP.PowerHouse.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.4.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "14.0.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -26,8 +26,8 @@ namespace BSP.DynamicsGP.PowerHouse.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://18.224.66.250:8083/PHWebServices/services/PHWebServices.PHWebServicesHttpS" +
-            "oap11Endpoint/")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://regal.qssi-wms.com:8083/PHWebServices/services/PHWebServices.PHWebServices" +
+            "HttpSoap11Endpoint/")]
         public string BSP_DynamicsGP_PowerHouse_PowerhouseWS_PHWebServices {
             get {
                 return ((string)(this["BSP_DynamicsGP_PowerHouse_PowerhouseWS_PHWebServices"]));
