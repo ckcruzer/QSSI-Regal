@@ -64,11 +64,13 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Dynamics.GP.eConnect">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics\eConnect 14.0\API\Microsoft.Dynamics.GP.eConnect.dll</HintPath>
+    <Reference Include="Microsoft.Dynamics.GP.eConnect, Version=18.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Windows\Microsoft.NET\assembly\GAC_64\Microsoft.Dynamics.GP.eConnect\v4.0_18.0.0.0__31bf3856ad364e35\Microsoft.Dynamics.GP.eConnect.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Dynamics.GP.eConnect.Serialization">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Microsoft Dynamics\eConnect 14.0\API\Microsoft.Dynamics.GP.eConnect.Serialization.dll</HintPath>
+    <Reference Include="Microsoft.Dynamics.GP.eConnect.Serialization, Version=18.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Windows\Microsoft.NET\assembly\GAC_64\Microsoft.Dynamics.GP.eConnect.Serialization\v4.0_18.0.0.0__31bf3856ad364e35\Microsoft.Dynamics.GP.eConnect.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="RestSharp, Version=106.6.9.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
       <HintPath>..\packages\RestSharp.106.6.9\lib\net452\RestSharp.dll</HintPath>
@@ -136,12 +138,12 @@
     <Compile Include="PowerHouseGPApiService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Configuration\AppSettings.cs" />
     <Compile Include="Service References\PowerHouseWS\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="Configuration\AppSettings.cs" />
     <Compile Include="Service\IPowerHouseGPService.cs" />
     <Compile Include="Service\PowerHouseGPInventoryAdjustmentService.cs" />
     <Compile Include="Service\PowerHouseGPShipmentService.cs" />
@@ -389,28 +391,19 @@
     <None Include="Service References\PowerHouseWS\BSP.PowerHouse.DynamicsGP.Integration.PowerHouseWS.TruckShipment.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\PowerHouseWS\PHWebServices.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Service References\PowerHouseWS\" />
-  </ItemGroup>
-  <ItemGroup>
+    <Content Include="ChangeLog.txt" />
     <None Include="Service References\PowerHouseWS\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Service References\PowerHouseWS\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\PowerHouseWS\PHWebServices.wsdl" />
     <None Include="Service References\PowerHouseWS\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="ChangeLog.txt" />
     <Content Include="TraceLog\placeholder.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -429,6 +422,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\PowerHouseWS\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
