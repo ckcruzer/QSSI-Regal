@@ -8,6 +8,14 @@ namespace BSP.PowerHouse.DynamicsGP.Integration
     {
         static void Main(string[] args)
         {
+            // Attach debugger if in Debug mode
+#if DEBUG
+            if (!Debugger.IsAttached)
+            {
+                Debugger.Launch();
+            }
+#endif
+
             if (!EventLog.SourceExists("PowerHouseDynamicsGPService"))
             {
                 EventLog.CreateEventSource("PowerHouseDynamicsGPService", "Application");
